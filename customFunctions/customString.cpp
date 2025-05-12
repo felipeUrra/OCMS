@@ -1,3 +1,5 @@
+// Felipe Urra Rivadeneira 0MI8000066
+
 #include "customString.h"
 #include <iostream>
 #include <cstring>
