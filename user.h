@@ -1,7 +1,9 @@
 // Felipe Urra Rivadeneira 0MI8000066
 
 #pragma once
-#include "email.h"
+#include "customFunctions/customString.h"
+#include "customFunctions/customVector.h"
+#include "mail.h"
 #include <stdint.h>
 
 class User {
@@ -9,21 +11,24 @@ private:
     CustomString name;
     CustomString lastName;
     uint8_t id;
-    Email email;
+    CustomString email;
+    CustomVector<Mail> mails;
 
 public:
     User();
-    User(CustomString, CustomString, uint8_t, CustomString);
+    User(CustomString&, CustomString&, uint8_t, CustomString&);
     virtual ~User() = 0;
 
     // Getters and setters
-    CustomString getName() const;
-    CustomString getLastName() const;
+    CustomString& getName() const;
+    CustomString& getLastName() const;
     uint8_t getId() const;
-    Email& getEmail() const;
+    CustomString& getEmail() const;
+    CustomVector<Mail> getMails() const;
 
     void setName(CustomString&);
     void setLastName(CustomString&);
     void setId(uint8_t);
-    void setEmail(Email&);
+    void setEmail(CustomString&);
+    void setMail(CustomVector<Mail>&);
 };
