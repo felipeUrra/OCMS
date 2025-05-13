@@ -8,6 +8,8 @@
 
 class User {
 private:
+    static uint8_t nextId;
+
     CustomString name;
     CustomString lastName;
     uint8_t id;
@@ -16,7 +18,7 @@ private:
 
 public:
     User();
-    User(CustomString&, CustomString&, uint8_t, CustomString&);
+    User(CustomString&, CustomString&, CustomString&, CustomVector<Mail>);
     virtual ~User() = 0;
 
     // Getters and setters
