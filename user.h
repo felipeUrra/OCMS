@@ -22,15 +22,14 @@ public:
     virtual ~User() = 0;
 
     // Getters and setters
-    CustomString& getName() const;
-    CustomString& getLastName() const;
+    CustomString getName() const;
+    CustomString getLastName() const;
     uint8_t getId() const;
-    CustomString& getEmail() const;
+    CustomString getEmail() const;
     CustomVector<Mail> getMails() const;
 
     void setName(CustomString&);
     void setLastName(CustomString&);
-    void setId(uint8_t);
     void setEmail(CustomString&);
     void setMail(CustomVector<Mail>&);
 };
