@@ -5,15 +5,22 @@
 
 class Admin : public User{
 private:
-    static uint8_t adminCount;
+    static bool adminExists;
+
+    static void changeAdminExists(bool); // choose a better name
 
 public:
     Admin();
     Admin(CustomString&, CustomString&, CustomString&, CustomVector<Mail>);
+    ~Admin() = default;
+
+    static bool getAdminExists();
 
     void createUser(UserType);
     void createUser(UserType, CustomString&, CustomString&, CustomString&, CustomVector<Mail>);
     void removeUser(uint8_t);
     void sendMail(User&, Mail&);
-    CustomVector<Mail> getMailsUsers(User&);
+    CustomVector<Mail> getMailsUser(User&);
+
+    
 };
