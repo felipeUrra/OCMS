@@ -6,7 +6,7 @@
 #include "mail.h"
 #include <stdint.h>
 
-enum class UserType {Admin = 1, Teacher = 2, Student = 3};
+enum class UserType {Admin = 1, Professor = 2, Student = 3};
 
 class User {
 private:

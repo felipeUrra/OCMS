@@ -21,6 +21,4 @@ public:
     void removeUser(uint8_t);
     void sendMail(User&, Mail&);
     CustomVector<Mail> getMailsUser(User&);
-
-    
 };
