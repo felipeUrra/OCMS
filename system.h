@@ -46,5 +46,5 @@ public:
 
     // Auxiliar functions
     void detectCommand(CustomString& cmd);
-    UserType whoIslogged();
+    UserType whoIslogged(); // maybe it isn't necessary :(
 };
