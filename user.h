@@ -6,7 +6,7 @@
 #include "mail.h"
 #include <stdint.h>
 
-enum class UserType {Admin = 1, Professor = 2, Student = 3};
+enum class UserType {Admin = 1, Teacher = 2, Student = 3};
 
 class User {
 private:
@@ -15,6 +15,7 @@ private:
     CustomString name;
     CustomString lastName;
     uint8_t id;
+    CustomString password;
     CustomString email;
     CustomVector<Mail> mails;
 
@@ -27,11 +28,14 @@ public:
     CustomString getName() const;
     CustomString getLastName() const;
     uint8_t getId() const;
+    CustomString getPassword() const;
     CustomString getEmail() const;
     CustomVector<Mail> getMails() const;
 
     void setName(CustomString&);
     void setLastName(CustomString&);
+    void setPassword(CustomString&);
     void setEmail(CustomString&);
     void setMail(CustomVector<Mail>&);
+    void sendMail(User&, Mail&);
 };
