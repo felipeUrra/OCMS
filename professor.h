@@ -6,18 +6,18 @@
 #include "customFunctions/customString.h"
 #include "customFunctions/customVector.h"
 
-class Professor : public User {
+class Teacher : public User {
 private:
     CustomVector<Course> courses;
 
 public:
-    Professor();
-    Professor(CustomString&, CustomString&, CustomString&, CustomVector<Mail>&);
-    ~Professor() = default;
+    Teacher();
+    Teacher(CustomString&, CustomString&, CustomString&, CustomVector<Mail>&);
+    ~Teacher() = default;
 
     void createCourse(CustomString&, CustomString&, CustomVector<Assignment>&, CustomVector<Student>&);
     void createAssignment(Course&, CustomString&);
     void enrollStudent(Course&, Student&);
     void gradeAssignment(Assignment&, uint8_t, uint8_t);
-    void sendMails(Mail&, CustomVector<Course>&);
+    void sendMailsCourse(Mail&, CustomString&);
 };
