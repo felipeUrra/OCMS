@@ -2,6 +2,7 @@
 
 #pragma once
 #include "user.h"
+#include <ctime>
 
 class Mail {
 private:
@@ -10,12 +11,12 @@ private:
     User* sender;
     uint8_t idMail;
     CustomString content;
-    CustomString date; // it will be a class or an struct
-    uint8_t time; // it will be a class or an struct;
+    CustomString date;
+    CustomString time;
 
 public:
     Mail();
-    Mail(User*, CustomString, CustomString, uint8_t);
+    Mail(User*, CustomString);
     ~Mail() = default;
 
     // getters and setters
@@ -23,10 +24,14 @@ public:
     uint8_t getIdMail() const;
     CustomString getContent() const;
     CustomString getDate() const;
-    uint8_t getTime() const;
+    CustomString getTime() const;
 
     void setSender(User&);
     void setContent(CustomString&);
-    void setDate(CustomString&);
-    void setTime(uint8_t);
+    //void setDate(CustomString&);
+    //void setTime(CustomString&);
+
+
+    void getActualDateAndTime();
+    void print();
 };
