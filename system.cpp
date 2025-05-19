@@ -3,7 +3,8 @@
 #include "system.h"
 #include "customFunctions/customString.h"
 #include <stdint.h>
-#include <iostream>
+#include "exceptions.h"
+
 
 // Getters and setters
 CustomVector<User> System::getUserList() const{return userList;}
@@ -12,12 +13,20 @@ User* System::getLoggedUser() const{return loggedUser;}
 void System::setUserList(CustomVector<User>& userList) {this->userList = userList;}
 void System::setLoggedUser(User& loggedUser) {this->loggedUser = &loggedUser;}
 
+
 // Common commands
 void System::login() {
     uint8_t id;
     CustomString password;
 
     std::cin >> id >> password;
+
+    while (!isdigit(id) && id < 0) {
+        throw InvalidDataType();
+        std::cin >> id >> password;
+    }
+    
+
     for (uint8_t i = 0; i < this->userList.getSize(); i++) {
         if (id == this->userList[i].getId()) {
 
@@ -52,6 +61,13 @@ void System::changePassword() {
     
     std::cout << "Wrong old password!"; // write something better here
 }
+
+void System::mailBox() {
+    for (uint8_t i = 0; i < loggedUser->getMails().getSize(); i++) {
+        loggedUser->getMails()[i].print();
+    }
+}
+
 
 // Auxiliar functions
 void System::detectCommand(CustomString& cmd) {
