@@ -10,7 +10,7 @@ private:
 
 public:
     Student();
-    Student(CustomString&, CustomString&, CustomString&, CustomVector<Mail>);
+    Student(CustomString&, CustomString&, CustomString&);
     ~Student() = default;
 
     // getters and setters
