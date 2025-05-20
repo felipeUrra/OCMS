@@ -25,13 +25,8 @@ void Teacher::gradeAssignment(Assignment& assignment, uint8_t idStudent, uint8_t
     }
 }
 
-void Teacher::sendMailsCourse(& mail, CustomString courseName) {
-    int i = 0;
-    while (this->courses[i].getName() == courseName) {
-        for (uint8_t i = 0; i < this->courses[i].getStudentsMembers().getSize(); i++) {
-            sendMail()
-        }
-        
+void Teacher::sendMailsCourse(Course& course, CustomString& mailText) {
+    for (uint8_t i = 0; i < course.getStudentsMembers().getSize(); i++) {
+        sendMail(course.getStudentsMembers()[i], mailText);
     }
-    
 }
