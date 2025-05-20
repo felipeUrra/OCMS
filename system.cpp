@@ -188,7 +188,7 @@ void System::detectCommand(CustomString& cmd) {
 
         if(loggedUser->getUserType() == UserType::Teacher) {
             if(cmd == "create_course") {createCourse();}
-
+            if(cmd == "add_to_course") {addToCourse();}
         }
         
         if(cmd == "logout") {logout();}
