@@ -1,10 +1,12 @@
+// Felipe Urra Rivadeneira 0MI8000066
+
 #pragma once
 #include "customFunctions/customString.h"
 #include "user.h"
 
 class System {
 private:
-    CustomVector<User> userList;
+    CustomVector<User*> userList;
     User* loggedUser;
 
 public:
@@ -12,19 +14,19 @@ public:
     virtual ~System() = 0;
 
     // Getters and setters
-    CustomVector<User> getUserList() const;
+    CustomVector<User*> getUserList() const;
     User* getLoggedUser() const;
 
-    void setUserList(CustomVector<User>&);
-    void setLoggedUser(User&);
+    void setUserList(CustomVector<User*>&);
+    void setLoggedUser(User*);
 
     // Common commands
     void login();
     void logout();
     void changePassword();
     void mailBox();
-    void message();
     void clearMailbox();
+    void message();
 
     // Admin commands
     void addTeacher();
@@ -34,13 +36,13 @@ public:
     // Teacher commands
     void createCourse();
     void addToCourse();
-    void enroll();
     void assignHomework();
     void messageStudents();
     void viewAssignmentSubmissions();
     void gradeAssignment();
 
     // Student commands
+    void enroll();
     void submitAssignment();
     void grades();
 
