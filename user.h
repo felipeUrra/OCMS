@@ -18,10 +18,11 @@ private:
     CustomString password;
     CustomString email;
     CustomVector<Mail> mails;
+    UserType userType;
 
 public:
     User();
-    User(CustomString&, CustomString&, CustomString&, CustomVector<Mail>);
+    User(CustomString&, CustomString&, CustomString&, UserType);
     virtual ~User() = 0;
 
     // Getters and setters
@@ -31,11 +32,16 @@ public:
     CustomString getPassword() const;
     CustomString getEmail() const;
     CustomVector<Mail> getMails() const;
+    UserType getUserType() const;
 
     void setName(CustomString&);
     void setLastName(CustomString&);
     void setPassword(CustomString&);
-    void setEmail(CustomString&);
+    void setEmail();
     void setMail(CustomVector<Mail>&);
-    void sendMail(User&, Mail&);
+    void setUserType(UserType);
+    
+    
+    void sendMail(User*, const CustomString&);
+    
 };
