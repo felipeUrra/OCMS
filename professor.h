@@ -12,12 +12,17 @@ private:
 
 public:
     Teacher();
-    Teacher(CustomString&, CustomString&, CustomString&, CustomVector<Mail>&);
+    Teacher(CustomString&, CustomString&, CustomString&);
     ~Teacher() = default;
 
-    void createCourse(CustomString&, CustomString&, CustomVector<Assignment>&, CustomVector<Student>&);
+    // getters and setters
+    CustomVector<Course> getCourses() const;
+    void setCourses(CustomVector<Course>&);
+
+    void createCourse(CustomString&, CustomString&);
     void createAssignment(Course&, CustomString&);
-    void enrollStudent(Course&, Student&);
+    void enrollStudent(Course&, User*);
+    Course& getSpecificCourse(CustomString&); // by courseName
     void gradeAssignment(Assignment&, uint8_t, uint8_t);
     void sendMailsCourse(Mail&, CustomString&);
 };
