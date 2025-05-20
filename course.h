@@ -10,17 +10,17 @@ private:
     CustomString name;
     CustomString password;
     CustomVector<Assignment> assignments;
-    CustomVector<Student> studentsMembers;
+    CustomVector<User*> studentsMembers;
 
 public:
     Course();
-    Course(CustomString, CustomString, CustomVector<Assignment>, CustomVector<Student>);
+    Course(const CustomString&, const CustomString&);
 
     // getters and setters
     CustomString getName();
     CustomString getPassword();
     CustomVector<Assignment> getAssignments();
-    CustomVector<Student> getStudentsMembers();
+    CustomVector<User*> getStudentsMembers();
 
     void setName(CustomString);
     void setPassword(CustomString);
