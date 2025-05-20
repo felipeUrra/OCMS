@@ -3,11 +3,11 @@
 #include "professor.h"
 
 Teacher::Teacher() {}
-Teacher::Teacher(CustomString& name, CustomString& lastName, CustomString& email, CustomVector<Mail>& mails) :
-    User(name, lastName, email, mails) {}
+Teacher::Teacher(CustomString& name, CustomString& lastName, CustomString& password) :
+    User(name, lastName, password, UserType::Teacher) {}
 
-void Teacher::createCourse(CustomString& name, CustomString& password, CustomVector<Assignment>& assignments, CustomVector<Student>& studentsMembers) {
-    Course course(name, password, assignments, studentsMembers);
+void Teacher::createCourse(CustomString& name, CustomString& password) {
+    Course course(name, password);
     this->courses.push_back(course);
 }
 
@@ -16,7 +16,7 @@ void Teacher::createAssignment(Course& course, CustomString& name) {
     course.getAssignments().push_back(assignment);
 }
 
-void Teacher::enrollStudent(Course& course, Student& student) {course.getStudentsMembers().push_back(student);}
+void Teacher::enrollStudent(Course& course, User* student) {course.getStudentsMembers().push_back(student);}
 
 void Teacher::gradeAssignment(Assignment& assignment, uint8_t idStudent, uint8_t grade) {
     int i = 0;
