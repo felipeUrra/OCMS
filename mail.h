@@ -10,7 +10,7 @@ private:
 
     User* sender;
     uint8_t idMail;
-    CustomString content;
+    CustomString text;
     CustomString date;
     CustomString time;
 
@@ -22,12 +22,12 @@ public:
     // getters and setters
     User* getSender() const;
     uint8_t getIdMail() const;
-    CustomString getContent() const;
+    CustomString getText() const;
     CustomString getDate() const;
     CustomString getTime() const;
 
     void setSender(User&);
-    void setContent(CustomString&);
+    void setText(CustomString&);
     //void setDate(CustomString&);
     //void setTime(CustomString&);
 

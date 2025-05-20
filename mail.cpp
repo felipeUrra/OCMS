@@ -7,10 +7,10 @@ Mail::Mail() : sender(nullptr)/*, idMail(nextIdMail++)*/ {
     getActualDateAndTime();
 }
 
-Mail::Mail(User* sender, CustomString content) :
+Mail::Mail(User* sender, CustomString text) :
     sender(sender),
     //idMail(nextIdMail++),
-    content(content)
+    text(text)
 {
     getActualDateAndTime();
 }
@@ -18,12 +18,12 @@ Mail::Mail(User* sender, CustomString content) :
 // getters and setters
 User* Mail::getSender() const{return this->sender;}
 uint8_t Mail::getIdMail() const{return this->idMail;}
-CustomString Mail::getContent() const{return this->content;}
+CustomString Mail::getText() const{return this->text;}
 CustomString Mail::getDate() const{return this->date;}
 CustomString Mail::getTime() const{return this->time;}
 
 void Mail::setSender(User& sender) {this->sender = &sender;}
-void Mail::setContent(CustomString& content) {this->content = content;}
+void Mail::setText(CustomString& text) {this->text = text;}
 //void Mail::setDate(CustomString& date) {this->date = date;}
 //void Mail::setTime(CustomString& time) {this->time = time;}
 
@@ -43,5 +43,5 @@ void Mail::getActualDateAndTime() {
 }
 
 void Mail::print() {
-    std::cout << time << " " << date << ", sent by " << sender->getName() << " " << sender->getLastName() << ": " << content;
+    std::cout << time << " " << date << ", sent by " << sender->getName() << " " << sender->getLastName() << ": " << text;
 }
