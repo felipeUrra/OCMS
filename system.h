@@ -37,7 +37,7 @@ public:
     void createCourse();
     void addToCourse();
     void assignHomework();
-    void messageStudents();
+    void messageStudents(); // of a specific course
     void viewAssignmentSubmissions();
     void gradeAssignment();
 
