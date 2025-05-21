@@ -43,5 +43,6 @@ public:
     
     
     void sendMail(User*, const CustomString&);
+    CustomString getStrUserType() const;
     
 };

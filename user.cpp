@@ -35,3 +35,20 @@ void User::sendMail(User* addressee, const CustomString& text) {
 
     addressee->getMails().push_back(mail);
 }
+
+CustomString User::getStrUserType() const{
+    switch (userType)
+    {
+    case UserType::Admin:
+        return "Admin";
+        break;
+    case UserType::Teacher:
+        return "Teacher";
+        break;
+    case UserType::Student:
+        return "Student";
+        break;
+    default:
+        break;
+    }
+}
