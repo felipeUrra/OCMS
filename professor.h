@@ -16,7 +16,7 @@ public:
     ~Teacher() = default;
 
     // getters and setters
-    CustomVector<Course> getCourses() const;
+    CustomVector<Course>& getCourses();
     void setCourses(CustomVector<Course>&);
 
     void createCourse(CustomString&, CustomString&);
