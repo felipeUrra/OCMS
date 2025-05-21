@@ -35,6 +35,10 @@ void System::login() {
             if (password == this->userList[i]->getPassword()) {
                 setLoggedUser(this->userList[i]);
                 std::cout << "Login successful!\n";
+                if (this->loggedUser->getUserType() != UserType::Admin) {
+                    std::cout << this->loggedUser->getName() << " " << this->loggedUser->getLastName() << " | " << this->loggedUser->getStrUserType() << " | " << this->loggedUser->getId();
+                }
+                
                 return;
             }
             
@@ -163,17 +167,58 @@ void System::addToCourse() {
 
     for (uint8_t i = 0; i < this->userList.getSize(); i++) {
         if (this->userList[i]->getId() == studentId && this->userList[i]->getUserType() == UserType::Student) {
-            Teacher* t = dynamic_cast<Teacher*>(loggedUser);
+            Teacher* t = dynamic_cast<Teacher*>(this->loggedUser);
             t->enrollStudent(t->getSpecificCourse(courseName), userList[i]);
 
             CustomString mailText = this->loggedUser->getName() + " " + this->loggedUser->getLastName() + " added you to " + courseName + ".\n";
-            loggedUser->sendMail(userList[i], mailText);
+            this->loggedUser->sendMail(userList[i], mailText);
             return;
         }
     }
 
-    std::cout << "There is no student with that ID!";
+    std::cout << "There is no student with that ID!\n";
 }
+
+void System::assignHomework() {
+    CustomString courseName;
+    CustomString assignmentName;
+
+    std::cin >> courseName >> assignmentName;
+
+    Teacher* t = dynamic_cast<Teacher*>(this->loggedUser);
+
+    for (uint8_t i = 0; i < t->getCourses().getSize(); i++) {
+        if (t->getCourses()[i].getName() == courseName) {
+            t->createAssignment(t->getCourses()[i], assignmentName);
+            std::cout << "Successfully created a new assignment!\n";
+            return;
+        }
+    }
+
+    std::cout << "Theres is no course with that name!\n";
+}
+
+void System::messageStudents() {
+    CustomString courseName;
+    CustomString mailText;
+
+    std::cin >> courseName >> mailText;
+
+    Teacher* t = dynamic_cast<Teacher*>(this->loggedUser);
+
+    for (uint8_t i = 0; i < t->getCourses().getSize(); i++) {
+        if (t->getCourses()[i].getName() == courseName) {  
+            for (uint8_t j = 0; j < t->getCourses()[i].getStudentsMembers().getSize(); j++) {
+                this->loggedUser->sendMail(t->getCourses()[i].getStudentsMembers()[j], mailText);
+            }
+            return;
+        }
+    }
+
+    std::cout << "Theres is no course with that name!\n";
+}
+
+
 
 // Auxiliar functions
 void System::detectCommand(CustomString& cmd) {
@@ -189,6 +234,7 @@ void System::detectCommand(CustomString& cmd) {
         if(loggedUser->getUserType() == UserType::Teacher) {
             if(cmd == "create_course") {createCourse();}
             if(cmd == "add_to_course") {addToCourse();}
+            if(cmd == "assign_homework") {assignHomework();}
         }
         
         if(cmd == "logout") {logout();}
