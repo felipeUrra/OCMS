@@ -240,7 +240,6 @@ void System::viewAssignmentSubmissions() {
     }
 
     std::cout << "You don't have any courses with that name!\n";
-    return;
 }
 
 void System::gradeAssignment() {
@@ -260,7 +259,6 @@ void System::gradeAssignment() {
     Teacher* t = dynamic_cast<Teacher*>(this->loggedUser);
 
     for (uint8_t i = 0; i < t->getCourses().getSize(); i++) {
-        for (uint8_t i = 0; i < t->getCourses().getSize(); i++) {
         if (t->getCourses()[i].getName() == courseName) {
             for (uint8_t j = 0; j < t->getCourses()[i].getAssignments().getSize(); j++) {
                 if (t->getCourses()[i].getAssignments()[j].getName() == assignmentName) {
@@ -287,8 +285,6 @@ void System::gradeAssignment() {
     }
 
     std::cout << "You don't have any courses with that name!\n";
-    return;
-    }
 }
 
 // Auxiliar functions
