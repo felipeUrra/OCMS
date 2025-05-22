@@ -19,4 +19,7 @@ public:
 
     void setAnswers(CustomVector<Answer>&);
     void setName(CustomString&);
+
+    void addAnswer(uint8_t, CustomString);
+    void printAnswers();
 };
