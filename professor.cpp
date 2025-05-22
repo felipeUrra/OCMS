@@ -32,7 +32,7 @@ Course& Teacher::getSpecificCourse(CustomString& courseName){
 
 void Teacher::gradeAssignment(Assignment& assignment, uint8_t idStudent, uint8_t grade) {
     int i = 0;
-    while (assignment.getAnswers()[i].getIdStudent() == idStudent) {
+    while (assignment.getAnswers()[i].getStudentId() == idStudent) {
         assignment.getAnswers()[i].setGrade(grade);
     }
 }
