@@ -266,11 +266,12 @@ void System::gradeAssignment() {
                         if (t->getCourses()[i].getAssignments()[j].getAnswers()[k].getStudentId() == studentId) {
                             t->getCourses()[i].getAssignments()[j].getAnswers()[k].setGrade(grade);
                             t->getCourses()[i].getAssignments()[j].getAnswers()[k].setTeacherCommet(comment);
-                            
+
                             for (uint8_t l = 0; l < this->userList.getSize(); l++) {
                                 if (this->userList[l]->getId() == studentId) {
                                     CustomString mailText = t->getName() + " " + t->getLastName() + " graded your work on";
-                                    t->sendMail(userList[l], mailText);
+                                    t->sendMail(this->userList[l], mailText);
+                                    return;
                                 }
                             }
                         }
@@ -284,7 +285,68 @@ void System::gradeAssignment() {
         }
     }
 
-    std::cout << "You don't have any courses with that name!\n";
+    std::cout << "You don't have any courses with that name!\n";    
+}
+
+// Student commands
+void System::enroll() {
+    CustomString courseName;
+    CustomString coursePassword;
+
+    std::cin >> courseName >> coursePassword;
+
+    Student* s = dynamic_cast<Student*>(this->loggedUser);
+
+    for (uint8_t i = 0; i < this->userList.getSize(); i++) {
+        if (userList[i]->getUserType() == UserType::Teacher) {
+            Teacher* t = dynamic_cast<Teacher*>(this->userList[i]);
+
+            for (uint8_t j = 0; j < t->getCourses().getSize(); j++) {
+                if (t->getCourses()[j].getName() == courseName) {
+                    if (t->getCourses()[j].getPassword() == coursePassword) {
+                        t->enrollStudent(t->getCourses()[j], s);
+                        s->getCoursesEnrolled().push_back(&t->getCourses()[j]);
+                        std::cout << "Successfully enrolled in " + courseName + ".\n";
+                        return;
+                    }
+                    std::cout << "Incorrect password.\n";
+                    return;
+                }
+            }
+        }
+    }
+
+    std::cout << "Theres is no course with that name!\n";
+}
+
+void System::submitAssignment() {
+    CustomString courseName;
+    CustomString assignmentName;
+    CustomString answerText;
+
+    std::cin >> courseName >> assignmentName >> answerText;
+
+    Student* s = dynamic_cast<Student*>(this->loggedUser);
+
+    for (uint8_t i = 0; i > s->getCoursesEnrolled().getSize(); i++) {
+        if (s->getCoursesEnrolled()[i]->getName() == courseName) {
+            for (uint8_t j = 0; j < s->getCoursesEnrolled()[i]->getAssignments().getSize(); j++) {
+                if (s->getCoursesEnrolled()[i]->getAssignments()[j].getName() == assignmentName) {
+                    s->getCoursesEnrolled()[i]->getAssignments()[j].addAnswers(s->getId(), answerText);
+                    return;
+                }
+            }
+            std::cout << "This course doesn't have any assignments with that name!\n";
+            return;
+        }
+    }
+    std::cout << "You have not enrolled in any course with this name!\n";
+}
+
+void System::grades() {
+    Student* s = dynamic_cast<Student*>(this->loggedUser);
+    
+    s->printAnswers();
 }
 
 // Auxiliar functions
