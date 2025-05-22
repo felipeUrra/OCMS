@@ -9,7 +9,7 @@ class Course {
 private:
     CustomString name;
     CustomString password;
-    CustomVector<Assignment> assignments;
+    CustomVector<Assignment*> assignments;
     CustomVector<User*> studentsMembers;
 
 public:
@@ -17,13 +17,13 @@ public:
     Course(const CustomString&, const CustomString&);
 
     // getters and setters
-    CustomString getName();
-    CustomString getPassword();
-    CustomVector<Assignment> getAssignments();
-    CustomVector<User*> getStudentsMembers();
+    CustomString& getName() const;
+    CustomString& getPassword() const;
+    CustomVector<Assignment*>& getAssignments() const;
+    CustomVector<User*> getStudentsMembers() const;
 
-    void setName(CustomString);
-    void setPassword(CustomString);
-    void setAssignments(CustomVector<Assignment>);
-    void setStudentsMembers(CustomVector<Student>);
+    void setName(CustomString&);
+    void setPassword(CustomString&);
+    void setAssignments(CustomVector<Assignment*>&);
+    void setStudentsMembers(CustomVector<Student*>&);
 };
