@@ -6,7 +6,8 @@
 
 class Student : public User {
 private:
-    CustomVector<Course> courses; 
+    //CustomVector<Answer*> answers;
+    CustomVector<Course*> coursesEnrolled; // cambiar las cosas que usas answers, para que usen este atributo
 
 public:
     Student();
@@ -14,9 +15,10 @@ public:
     ~Student() = default;
 
     // getters and setters
-    CustomVector<Course>& getCourses();
-    void setCourses(CustomVector<Course>&);
+    CustomVector<Course*>& getCoursesEnrolled();
+
+    void setCoursesEnrolled();
 
     void sendMail(CustomString&, uint8_t);
-    void seeGrades();
+    void printAnswers();
 };
