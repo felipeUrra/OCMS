@@ -8,21 +8,25 @@
 
 class Answer {
 private:
-    uint8_t idStudent;
-    CustomString text;
-    uint8_t grade;
+    uint8_t studentId;
+    CustomString answerText;
+    CustomString teacherComment;
+    double grade;
 
 public:
-    Answer();
-    Answer(uint8_t, CustomString, uint8_t);
+    Answer(uint8_t, CustomString);
     ~Answer() = default;
 
     // getters and setters
-    uint8_t getIdStudent() const;
-    CustomString getText() const;
-    uint8_t getGrade() const;
+    uint8_t getStudentId() const;
+    CustomString getAnswerText() const;
+    CustomString getTeacherComment() const;
+    double getGrade() const;
 
-    void setIdStudent(uint8_t);
-    void setText(CustomString);
-    void setGrade(uint8_t);
+    void setStudentId(uint8_t);
+    void setAnswerText(CustomString);
+    void setTeacherCommet(CustomString);
+    void setGrade(double);
+
+    void print();
 };
