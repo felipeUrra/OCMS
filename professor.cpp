@@ -7,24 +7,24 @@ Teacher::Teacher(CustomString& name, CustomString& lastName, CustomString& passw
     User(name, lastName, password, UserType::Teacher) {}
 
 // getters and setters
-CustomVector<Course>& Teacher::getCourses() {return courses;}
-void Teacher::setCourses(CustomVector<Course>& courses) {this->courses = courses;}
+CustomVector<Course*>& Teacher::getCourses() {return courses;}
+void Teacher::setCourses(CustomVector<Course*>& courses) {this->courses = courses;}
 
 void Teacher::createCourse(CustomString& name, CustomString& password) {
     Course course(name, password);
-    this->courses.push_back(course);
+    this->courses.push_back(&course);
 }
 
-void Teacher::createAssignment(Course& course, CustomString& name) {
+void Teacher::createAssignment(Course* course, CustomString& name) {
     Assignment assignment(name);
-    course.getAssignments().push_back(assignment);
+    course->getAssignments().push_back(&assignment);
 }
 
-void Teacher::enrollStudent(Course& course, User* student) {course.getStudentsMembers().push_back(student);}
+void Teacher::enrollStudent(Course* course, User* student) {course->getStudentsMembers().push_back(student);}
 
-Course& Teacher::getSpecificCourse(CustomString& courseName){
+Course* Teacher::getSpecificCourse(CustomString& courseName){
     for (uint8_t i = 0; i < this->courses.getSize(); i++) {
-        if (this->courses[i].getName() == courseName) {
+        if (this->courses[i]->getName() == courseName) {
             return this->courses[i];
         }
     }  
@@ -37,8 +37,8 @@ void Teacher::gradeAssignment(Assignment& assignment, uint8_t idStudent, uint8_t
     }
 }
 
-void Teacher::sendMailsCourse(Course& course, CustomString& mailText) {
-    for (uint8_t i = 0; i < course.getStudentsMembers().getSize(); i++) {
-        sendMail(course.getStudentsMembers()[i], mailText);
+void Teacher::sendMailsCourse(Course* course, CustomString& mailText) {
+    for (uint8_t i = 0; i < course->getStudentsMembers().getSize(); i++) {
+        sendMail(course->getStudentsMembers()[i], mailText);
     }
 }

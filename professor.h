@@ -8,7 +8,7 @@
 
 class Teacher : public User {
 private:
-    CustomVector<Course> courses;
+    CustomVector<Course*> courses;
 
 public:
     Teacher();
@@ -16,13 +16,13 @@ public:
     ~Teacher() = default;
 
     // getters and setters
-    CustomVector<Course>& getCourses();
-    void setCourses(CustomVector<Course>&);
+    CustomVector<Course*>& getCourses();
+    void setCourses(CustomVector<Course*>&);
 
     void createCourse(CustomString&, CustomString&);
-    void createAssignment(Course&, CustomString&);
-    void enrollStudent(Course&, User*);
-    Course& getSpecificCourse(CustomString&); // by courseName
+    void createAssignment(Course*, CustomString&);
+    void enrollStudent(Course*, User*);
+    Course* getSpecificCourse(CustomString&); // by courseName
     void gradeAssignment(Assignment&, uint8_t, uint8_t);
-    void sendMailsCourse(Course&, CustomString&);
+    void sendMailsCourse(Course*, CustomString&);
 };
