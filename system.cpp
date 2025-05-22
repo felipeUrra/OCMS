@@ -188,7 +188,7 @@ void System::assignHomework() {
     Teacher* t = dynamic_cast<Teacher*>(this->loggedUser);
 
     for (uint8_t i = 0; i < t->getCourses().getSize(); i++) {
-        if (t->getCourses()[i].getName() == courseName) {
+        if (t->getCourses()[i]->getName() == courseName) {
             t->createAssignment(t->getCourses()[i], assignmentName);
             std::cout << "Successfully created a new assignment!\n";
             return;
@@ -207,9 +207,9 @@ void System::messageStudents() {
     Teacher* t = dynamic_cast<Teacher*>(this->loggedUser);
 
     for (uint8_t i = 0; i < t->getCourses().getSize(); i++) {
-        if (t->getCourses()[i].getName() == courseName) {  
-            for (uint8_t j = 0; j < t->getCourses()[i].getStudentsMembers().getSize(); j++) {
-                t->sendMail(t->getCourses()[i].getStudentsMembers()[j], mailText);
+        if (t->getCourses()[i]->getName() == courseName) {  
+            for (uint8_t j = 0; j < t->getCourses()[i]->getStudentsMembers().getSize(); j++) {
+                t->sendMail(t->getCourses()[i]->getStudentsMembers()[j], mailText);
             }
             return;
         }
@@ -227,10 +227,10 @@ void System::viewAssignmentSubmissions() {
     Teacher* t = dynamic_cast<Teacher*>(this->loggedUser);
 
     for (uint8_t i = 0; i < t->getCourses().getSize(); i++) {
-        if (t->getCourses()[i].getName() == courseName) {
-            for (uint8_t j = 0; j < t->getCourses()[i].getAssignments().getSize(); j++) {
-                if (t->getCourses()[i].getAssignments()[j].getName() == assignmentName) {
-                    t->getCourses()[i].getAssignments()[j].printAnswers();
+        if (t->getCourses()[i]->getName() == courseName) {
+            for (uint8_t j = 0; j < t->getCourses()[i]->getAssignments().getSize(); j++) {
+                if (t->getCourses()[i]->getAssignments()[j]->getName() == assignmentName) {
+                    t->getCourses()[i]->getAssignments()[j]->printAnswers();
                     return;
                 }
             }
@@ -259,13 +259,13 @@ void System::gradeAssignment() {
     Teacher* t = dynamic_cast<Teacher*>(this->loggedUser);
 
     for (uint8_t i = 0; i < t->getCourses().getSize(); i++) {
-        if (t->getCourses()[i].getName() == courseName) {
-            for (uint8_t j = 0; j < t->getCourses()[i].getAssignments().getSize(); j++) {
-                if (t->getCourses()[i].getAssignments()[j].getName() == assignmentName) {
-                    for (uint8_t k = 0; k < t->getCourses()[i].getAssignments()[j].getAnswers().getSize(); k++) {
-                        if (t->getCourses()[i].getAssignments()[j].getAnswers()[k].getStudentId() == studentId) {
-                            t->getCourses()[i].getAssignments()[j].getAnswers()[k].setGrade(grade);
-                            t->getCourses()[i].getAssignments()[j].getAnswers()[k].setTeacherCommet(comment);
+        if (t->getCourses()[i]->getName() == courseName) {
+            for (uint8_t j = 0; j < t->getCourses()[i]->getAssignments().getSize(); j++) {
+                if (t->getCourses()[i]->getAssignments()[j]->getName() == assignmentName) {
+                    for (uint8_t k = 0; k < t->getCourses()[i]->getAssignments()[j]->getAnswers().getSize(); k++) {
+                        if (t->getCourses()[i]->getAssignments()[j]->getAnswers()[k].getStudentId() == studentId) {
+                            t->getCourses()[i]->getAssignments()[j]->getAnswers()[k].setGrade(grade);
+                            t->getCourses()[i]->getAssignments()[j]->getAnswers()[k].setTeacherCommet(comment);
 
                             for (uint8_t l = 0; l < this->userList.getSize(); l++) {
                                 if (this->userList[l]->getId() == studentId) {
@@ -302,10 +302,10 @@ void System::enroll() {
             Teacher* t = dynamic_cast<Teacher*>(this->userList[i]);
 
             for (uint8_t j = 0; j < t->getCourses().getSize(); j++) {
-                if (t->getCourses()[j].getName() == courseName) {
-                    if (t->getCourses()[j].getPassword() == coursePassword) {
+                if (t->getCourses()[j]->getName() == courseName) {
+                    if (t->getCourses()[j]->getPassword() == coursePassword) {
                         t->enrollStudent(t->getCourses()[j], s);
-                        s->getCoursesEnrolled().push_back(&t->getCourses()[j]);
+                        s->getCoursesEnrolled().push_back(t->getCourses()[j]);
                         std::cout << "Successfully enrolled in " + courseName + ".\n";
                         return;
                     }
@@ -331,8 +331,8 @@ void System::submitAssignment() {
     for (uint8_t i = 0; i > s->getCoursesEnrolled().getSize(); i++) {
         if (s->getCoursesEnrolled()[i]->getName() == courseName) {
             for (uint8_t j = 0; j < s->getCoursesEnrolled()[i]->getAssignments().getSize(); j++) {
-                if (s->getCoursesEnrolled()[i]->getAssignments()[j].getName() == assignmentName) {
-                    s->getCoursesEnrolled()[i]->getAssignments()[j].addAnswers(s->getId(), answerText);
+                if (s->getCoursesEnrolled()[i]->getAssignments()[j]->getName() == assignmentName) {
+                    s->getCoursesEnrolled()[i]->getAssignments()[j]->addAnswer(s->getId(), answerText);
                     return;
                 }
             }
