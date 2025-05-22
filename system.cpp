@@ -195,7 +195,7 @@ void System::assignHomework() {
         }
     }
 
-    std::cout << "Theres is no course with that name!\n";
+    std::cout << "You don't have any course with that name!\n";
 }
 
 void System::messageStudents() {
@@ -209,16 +209,87 @@ void System::messageStudents() {
     for (uint8_t i = 0; i < t->getCourses().getSize(); i++) {
         if (t->getCourses()[i].getName() == courseName) {  
             for (uint8_t j = 0; j < t->getCourses()[i].getStudentsMembers().getSize(); j++) {
-                this->loggedUser->sendMail(t->getCourses()[i].getStudentsMembers()[j], mailText);
+                t->sendMail(t->getCourses()[i].getStudentsMembers()[j], mailText);
             }
             return;
         }
     }
 
-    std::cout << "Theres is no course with that name!\n";
+    std::cout << "You don't have any courses with that name!\n";
 }
 
+void System::viewAssignmentSubmissions() {
+    CustomString courseName;
+    CustomString assignmentName;
 
+    std::cin >> courseName >> assignmentName;
+
+    Teacher* t = dynamic_cast<Teacher*>(this->loggedUser);
+
+    for (uint8_t i = 0; i < t->getCourses().getSize(); i++) {
+        if (t->getCourses()[i].getName() == courseName) {
+            for (uint8_t j = 0; j < t->getCourses()[i].getAssignments().getSize(); j++) {
+                if (t->getCourses()[i].getAssignments()[j].getName() == assignmentName) {
+                    t->getCourses()[i].getAssignments()[j].printAnswers();
+                    return;
+                }
+            }
+            std::cout << "This course doesn't have any assignments with that name!\n";
+            return;
+        }
+    }
+
+    std::cout << "You don't have any courses with that name!\n";
+    return;
+}
+
+void System::gradeAssignment() {
+    CustomString courseName;
+    CustomString assignmentName;
+    uint8_t studentId;
+    double grade;
+    CustomString comment;
+
+    std::cin >> courseName >> assignmentName >> studentId >> grade >> comment;
+
+    while ((!isdigit(studentId) && studentId < 0) || (!isdigit(grade))) {
+        throw InvalidDataType();
+        std::cin >> courseName >> assignmentName >> studentId >> grade >> comment;
+    }
+
+    Teacher* t = dynamic_cast<Teacher*>(this->loggedUser);
+
+    for (uint8_t i = 0; i < t->getCourses().getSize(); i++) {
+        for (uint8_t i = 0; i < t->getCourses().getSize(); i++) {
+        if (t->getCourses()[i].getName() == courseName) {
+            for (uint8_t j = 0; j < t->getCourses()[i].getAssignments().getSize(); j++) {
+                if (t->getCourses()[i].getAssignments()[j].getName() == assignmentName) {
+                    for (uint8_t k = 0; k < t->getCourses()[i].getAssignments()[j].getAnswers().getSize(); k++) {
+                        if (t->getCourses()[i].getAssignments()[j].getAnswers()[k].getStudentId() == studentId) {
+                            t->getCourses()[i].getAssignments()[j].getAnswers()[k].setGrade(grade);
+                            t->getCourses()[i].getAssignments()[j].getAnswers()[k].setTeacherCommet(comment);
+                            
+                            for (uint8_t l = 0; l < this->userList.getSize(); l++) {
+                                if (this->userList[l]->getId() == studentId) {
+                                    CustomString mailText = t->getName() + " " + t->getLastName() + " graded your work on";
+                                    t->sendMail(userList[l], mailText);
+                                }
+                            }
+                        }
+                    }
+                    std::cout << "There is no assigment submission belonging to a student with that ID.";
+                    return;
+                }
+            }
+            std::cout << "This course doesn't have any assignments with that name!\n";
+            return;
+        }
+    }
+
+    std::cout << "You don't have any courses with that name!\n";
+    return;
+    }
+}
 
 // Auxiliar functions
 void System::detectCommand(CustomString& cmd) {
@@ -235,6 +306,15 @@ void System::detectCommand(CustomString& cmd) {
             if(cmd == "create_course") {createCourse();}
             if(cmd == "add_to_course") {addToCourse();}
             if(cmd == "assign_homework") {assignHomework();}
+            if(cmd == "message_students") {messageStudents();}
+            if(cmd == "view_assignment_submissions") {viewAssignmentSubmissions();}
+            if(cmd == "grade_assignment") {gradeAssignment();}
+        }
+
+        if(loggedUser->getUserType() == UserType::Student) {
+            if(cmd == "enroll") {enroll();}
+            if(cmd == "submit_assignment") {submitAssignment();}
+            if(cmd == "grades") {grades();}
         }
         
         if(cmd == "logout") {logout();}
