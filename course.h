@@ -13,17 +13,16 @@ private:
     CustomVector<User*> studentsMembers;
 
 public:
-    Course();
     Course(const CustomString&, const CustomString&);
 
     // getters and setters
-    CustomString& getName() const;
-    CustomString& getPassword() const;
-    CustomVector<Assignment*>& getAssignments() const;
-    CustomVector<User*> getStudentsMembers() const;
+    CustomString getName() const;
+    CustomString getPassword() const;
+    CustomVector<Assignment*>& getAssignments();
+    CustomVector<User*>& getStudentsMembers();
 
     void setName(CustomString&);
     void setPassword(CustomString&);
     void setAssignments(CustomVector<Assignment*>&);
-    void setStudentsMembers(CustomVector<Student*>&);
+    void setStudentsMembers(CustomVector<User*>&);
 };
