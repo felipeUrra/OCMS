@@ -17,7 +17,7 @@ private:
     uint8_t id;
     CustomString password;
     CustomString email;
-    CustomVector<Mail> mails;
+    CustomVector<Mail*> mails;
     UserType userType;
 
 public:
@@ -30,14 +30,14 @@ public:
     uint8_t getId() const;
     CustomString getPassword() const;
     CustomString getEmail() const;
-    CustomVector<Mail> getMails() const;
+    CustomVector<Mail*>& getMails();
     UserType getUserType() const;
 
     void setName(CustomString&);
     void setLastName(CustomString&);
     void setPassword(CustomString&);
     void setEmail();
-    void setMail(CustomVector<Mail>&);
+    void setMail(CustomVector<Mail*>&);
     void setUserType(UserType);
     
     
