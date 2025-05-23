@@ -2,7 +2,6 @@
 
 #include "professor.h"
 
-Teacher::Teacher() {}
 Teacher::Teacher(CustomString& name, CustomString& lastName, CustomString& password) :
     User(name, lastName, password, UserType::Teacher) {}
 
@@ -30,12 +29,12 @@ Course* Teacher::getSpecificCourse(CustomString& courseName){
     }  
 }
 
-void Teacher::gradeAssignment(Assignment& assignment, uint8_t idStudent, uint8_t grade) {
-    int i = 0;
-    while (assignment.getAnswers()[i].getStudentId() == idStudent) {
-        assignment.getAnswers()[i].setGrade(grade);
-    }
-}
+//void Teacher::gradeAssignment(Assignment& assignment, uint8_t idStudent, uint8_t grade) {
+//    int i = 0;
+//    while (assignment.getAnswers()[i].getStudentId() == idStudent) {
+//        assignment.getAnswers()[i].setGrade(grade);
+//    }
+//}
 
 void Teacher::sendMailsCourse(Course* course, CustomString& mailText) {
     for (uint8_t i = 0; i < course->getStudentsMembers().getSize(); i++) {
