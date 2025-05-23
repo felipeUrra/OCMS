@@ -20,7 +20,7 @@ public:
     ~Mail() = default;
 
     // getters and setters
-    User* getSender() const;
+    User* getSender();
     uint8_t getIdMail() const;
     CustomString getText() const;
     CustomString getDate() const;
@@ -28,9 +28,6 @@ public:
 
     void setSender(User&);
     void setText(CustomString&);
-    //void setDate(CustomString&);
-    //void setTime(CustomString&);
-
 
     void getActualDateAndTime();
     void print();

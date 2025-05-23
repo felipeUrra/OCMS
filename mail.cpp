@@ -16,7 +16,7 @@ Mail::Mail(User* sender, CustomString text) :
 }
 
 // getters and setters
-User* Mail::getSender() const{return this->sender;}
+User* Mail::getSender() {return this->sender;}
 uint8_t Mail::getIdMail() const{return this->idMail;}
 CustomString Mail::getText() const{return this->text;}
 CustomString Mail::getDate() const{return this->date;}
@@ -24,8 +24,6 @@ CustomString Mail::getTime() const{return this->time;}
 
 void Mail::setSender(User& sender) {this->sender = &sender;}
 void Mail::setText(CustomString& text) {this->text = text;}
-//void Mail::setDate(CustomString& date) {this->date = date;}
-//void Mail::setTime(CustomString& time) {this->time = time;}
 
 void Mail::getActualDateAndTime() {
     time_t t = std::time(nullptr);
