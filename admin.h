@@ -10,8 +10,7 @@ private:
     static void changeAdminExists(bool); // choose a better name
 
 public:
-    Admin();
-    Admin(CustomString&, CustomString&, CustomString&, CustomVector<Mail>);
+    Admin(CustomString&, CustomString&, CustomString&);
     ~Admin() = default;
 
     static bool getAdminExists();
