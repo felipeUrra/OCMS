@@ -10,11 +10,11 @@ private:
 
 public:
     Student(CustomString&, CustomString&, CustomString&);
-    ~Student() = default;
+    ~Student() = default; // verify
 
     // getters and setters
     CustomVector<Course*>& getCoursesEnrolled();
     void setCoursesEnrolled(CustomVector<Course*>&);
 
-    void printAnswers(); // CourseName | AssignmentName | Grade | TeacherComment
+    void printGradesInfo(); // CourseName | AssignmentName | Grade | TeacherComment
 };
