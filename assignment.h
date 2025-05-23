@@ -6,20 +6,19 @@
 class Assignment {
 private:
     CustomString name;
-    CustomVector<Answer> answers;
+    CustomVector<Answer*> answers;
 
 public:
-    Assignment();
     Assignment(CustomString&);
-    ~Assignment() = default;
+    ~Assignment();
 
     // getters and setters
-    CustomVector<Answer>& getAnswers();
-    CustomString& getName();
+    CustomVector<Answer*>& getAnswers();
+    CustomString getName() const;
 
-    void setAnswers(CustomVector<Answer>&);
+    void setAnswers(CustomVector<Answer*>&);
     void setName(CustomString&);
 
-    void addAnswer(uint8_t, CustomString);
-    void printAnswers();
+    void addAnswer(Student*, CustomString&);
+    void printAnswers(); // Student Name, StudentLastName, StudentId: AnswerText
 };
