@@ -12,7 +12,7 @@ private:
 
 public:
     Teacher(CustomString&, CustomString&, CustomString&);
-    ~Teacher() = default;
+    ~Teacher();
 
     // getters and setters
     CustomVector<Course*>& getCourses();
@@ -22,6 +22,4 @@ public:
     void createAssignment(Course*, CustomString&);
     void enrollStudent(Course*, User*);
     Course* getSpecificCourse(CustomString&); // by courseName
-    //void gradeAssignment(Assignment*, uint8_t, uint8_t);
-    //void sendMailsCourse(Course*, CustomString&);
 };
