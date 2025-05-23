@@ -8,25 +8,26 @@
 
 class Answer {
 private:
-    uint8_t studentId;
+    Student* student;
     CustomString answerText;
     CustomString teacherComment;
     double grade;
+    bool isGraded;
 
 public:
-    Answer(uint8_t, CustomString);
+    Answer(Student*, CustomString&);
     ~Answer() = default;
 
     // getters and setters
-    uint8_t getStudentId() const;
+    Student* getStudent();
     CustomString getAnswerText() const;
     CustomString getTeacherComment() const;
     double getGrade() const;
+    bool getIsGraded() const;
 
-    void setStudentId(uint8_t);
-    void setAnswerText(CustomString);
-    void setTeacherCommet(CustomString);
+    void setStudent(Student*);
+    void setAnswerText(CustomString&);
+    void setTeacherCommet(CustomString&);
     void setGrade(double);
-
-    void print();
+    void setIsGraded(bool);
 };
