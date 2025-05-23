@@ -21,7 +21,6 @@ private:
     UserType userType;
 
 public:
-    User();
     User(CustomString&, CustomString&, CustomString&, UserType);
     virtual ~User() = 0;
 

@@ -4,7 +4,6 @@
 
 uint8_t User::nextId = 0;
 
-User::User() : id(nextId++) {}
 User::User(CustomString& name, CustomString& lastName, CustomString& password, UserType userType) :
     name(name),
     lastName(lastName),
