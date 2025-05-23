@@ -75,7 +75,7 @@ void System::mailBox() {
     }
     
     for (uint8_t i = 0; i < loggedUser->getMails().getSize(); i++) {
-        this->loggedUser->getMails()[i].print();
+        this->loggedUser->getMails()[i]->print();
     }
 }
 
@@ -265,7 +265,7 @@ void System::gradeAssignment() {
             for (uint8_t j = 0; j < t->getCourses()[i]->getAssignments().getSize(); j++) {
                 if (t->getCourses()[i]->getAssignments()[j]->getName() == assignmentName) {
                     for (uint8_t k = 0; k < t->getCourses()[i]->getAssignments()[j]->getAnswers().getSize(); k++) {
-                        if (t->getCourses()[i]->getAssignments()[j]->getAnswers()[k]->getStudentId() == studentId) {
+                        if (t->getCourses()[i]->getAssignments()[j]->getAnswers()[k]->getStudent()->getId() == studentId) {
                             t->getCourses()[i]->getAssignments()[j]->getAnswers()[k]->setGrade(grade);
                             t->getCourses()[i]->getAssignments()[j]->getAnswers()[k]->setTeacherCommet(comment);
                             t->getCourses()[i]->getAssignments()[j]->getAnswers()[k]->setIsGraded(true);
@@ -335,7 +335,7 @@ void System::submitAssignment() {
         if (s->getCoursesEnrolled()[i]->getName() == courseName) {
             for (uint8_t j = 0; j < s->getCoursesEnrolled()[i]->getAssignments().getSize(); j++) {
                 if (s->getCoursesEnrolled()[i]->getAssignments()[j]->getName() == assignmentName) {
-                    s->getCoursesEnrolled()[i]->getAssignments()[j]->addAnswer(s->getId(), answerText);
+                    s->getCoursesEnrolled()[i]->getAssignments()[j]->addAnswer(s, answerText);
                     return;
                 }
             }
@@ -349,7 +349,7 @@ void System::submitAssignment() {
 void System::grades() {
     Student* s = dynamic_cast<Student*>(this->loggedUser);
     
-    s->printAnswers();
+    s->printGradesInfo();
 }
 
 // Auxiliar functions
