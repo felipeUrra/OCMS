@@ -18,5 +18,5 @@ public:
     void createUser(UserType);
     void createUser(UserType, CustomString&, CustomString&, CustomString&, CustomVector<Mail>);
     void removeUser(uint8_t);
-    CustomVector<Mail> getMailsUser(User&);
+    CustomVector<Mail*>& getMailsUser(User&);
 };

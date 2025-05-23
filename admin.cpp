@@ -14,4 +14,4 @@ Admin::Admin(CustomString& name, CustomString& lastName, CustomString& password)
 bool Admin::getAdminExists() {return adminExists;}
 void Admin::changeAdminExists(bool adminExists) {Admin::adminExists = adminExists;} 
 
-CustomVector<Mail> Admin::getMailsUser(User& user) {return user.getMails();}
+CustomVector<Mail*>& Admin::getMailsUser(User& user) {return user.getMails();}
