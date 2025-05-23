@@ -23,5 +23,5 @@ public:
     void enrollStudent(Course*, User*);
     Course* getSpecificCourse(CustomString&); // by courseName
     //void gradeAssignment(Assignment*, uint8_t, uint8_t);
-    void sendMailsCourse(Course*, CustomString&);
+    //void sendMailsCourse(Course*, CustomString&);
 };

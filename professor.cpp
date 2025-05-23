@@ -36,8 +36,8 @@ Course* Teacher::getSpecificCourse(CustomString& courseName){
 //    }
 //}
 
-void Teacher::sendMailsCourse(Course* course, CustomString& mailText) {
-    for (uint8_t i = 0; i < course->getStudentsMembers().getSize(); i++) {
-        sendMail(course->getStudentsMembers()[i], mailText);
-    }
-}
+// void Teacher::sendMailsCourse(Course* course, CustomString& mailText) {
+//     for (uint8_t i = 0; i < course->getStudentsMembers().getSize(); i++) {
+//         sendMail(course->getStudentsMembers()[i], mailText);
+//     }
+// }
