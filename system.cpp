@@ -116,6 +116,7 @@ void System::addTeacher() {
 
     Teacher teacher(name, lastName, password);
     this->userList.push_back(&teacher);
+    //set the email
 
     std::cout << "Added teacher " << name << " " << lastName << " with ID " << teacher.getId() << "!\n";
 }
@@ -129,6 +130,7 @@ void System::addStudent() {
 
     Student student(name, lastName, password);
     this->userList.push_back(&student);
+    //set the email
 
     std::cout << "Added student " << name << " " << lastName << " with ID " << student.getId() << "!\n";
 }
@@ -263,9 +265,10 @@ void System::gradeAssignment() {
             for (uint8_t j = 0; j < t->getCourses()[i]->getAssignments().getSize(); j++) {
                 if (t->getCourses()[i]->getAssignments()[j]->getName() == assignmentName) {
                     for (uint8_t k = 0; k < t->getCourses()[i]->getAssignments()[j]->getAnswers().getSize(); k++) {
-                        if (t->getCourses()[i]->getAssignments()[j]->getAnswers()[k].getStudentId() == studentId) {
-                            t->getCourses()[i]->getAssignments()[j]->getAnswers()[k].setGrade(grade);
-                            t->getCourses()[i]->getAssignments()[j]->getAnswers()[k].setTeacherCommet(comment);
+                        if (t->getCourses()[i]->getAssignments()[j]->getAnswers()[k]->getStudentId() == studentId) {
+                            t->getCourses()[i]->getAssignments()[j]->getAnswers()[k]->setGrade(grade);
+                            t->getCourses()[i]->getAssignments()[j]->getAnswers()[k]->setTeacherCommet(comment);
+                            t->getCourses()[i]->getAssignments()[j]->getAnswers()[k]->setIsGraded(true);
 
                             for (uint8_t l = 0; l < this->userList.getSize(); l++) {
                                 if (this->userList[l]->getId() == studentId) {
