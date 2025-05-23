@@ -1,6 +1,11 @@
 #include "course.h"
 
 Course::Course(const CustomString& name, const CustomString& password) : name(name), password(password) {}
+Course::~Course() {
+    for (uint8_t i = 0; i < this->assignments.getSize(); i++) {
+        delete this->assignments[i];
+    }
+}
 
 
 // Getters and setters

@@ -14,6 +14,7 @@ private:
 
 public:
     Course(const CustomString&, const CustomString&);
+    ~Course();
 
     // getters and setters
     CustomString getName() const;
