@@ -1,3 +1,5 @@
+// Felipe Urra Rivadeneira 0MI8000066
+
 #include "course.h"
 
 Course::Course(const CustomString& name, const CustomString& password) : name(name), password(password) {}

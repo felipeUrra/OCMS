@@ -3,7 +3,7 @@
 #pragma once
 #include "customFunctions/customString.h"
 #include "customFunctions/customVector.h"
-#include "mail.h"
+#include "../mail.h"
 #include <stdint.h>
 
 enum class UserType {Admin = 1, Teacher = 2, Student = 3};

@@ -1,15 +1,14 @@
+// Felipe Urra Rivadeneira 0MI8000066
+
 #include "mail.h"
-#include "iostream"
+#include <iostream>
 
-//uint8_t Mail::nextIdMail = 0;
-
-Mail::Mail() : sender(nullptr)/*, idMail(nextIdMail++)*/ {
+Mail::Mail() : sender(nullptr) {
     getActualDateAndTime();
 }
 
 Mail::Mail(User* sender, CustomString text) :
     sender(sender),
-    //idMail(nextIdMail++),
     text(text)
 {
     getActualDateAndTime();

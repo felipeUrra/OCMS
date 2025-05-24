@@ -2,7 +2,7 @@
 
 #pragma once
 #include "user.h"
-#include "course.h"
+#include "../course.h"
 
 class Student : public User {
 private:

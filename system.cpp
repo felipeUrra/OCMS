@@ -4,8 +4,8 @@
 #include "customFunctions/customString.h"
 #include <stdint.h>
 #include "exceptions.h"
-#include "professor.h"
-#include "student.h"
+#include "users/teacher.h"
+#include "users/student.h"
 
 
 // Getters and setters

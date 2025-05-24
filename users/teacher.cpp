@@ -1,6 +1,6 @@
 // Felipe Urra Rivadeneira 0MI8000066
 
-#include "professor.h"
+#include "teacher.h"
 
 Teacher::Teacher(CustomString& name, CustomString& lastName, CustomString& password) :
     User(name, lastName, password, UserType::Teacher) {}

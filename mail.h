@@ -1,7 +1,7 @@
 // Felipe Urra Rivadeneira 0MI8000066
 
 #pragma once
-#include "user.h"
+#include "users/user.h"
 #include <ctime>
 
 class Mail {
