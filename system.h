@@ -3,22 +3,29 @@
 #pragma once
 #include "customFunctions/customString.h"
 #include "users/user.h"
+#include "users/admin.h"
 
 class System {
 private:
     CustomVector<User*> userList;
     User* loggedUser;
+    Admin* systemAdmin;
+    bool closeSystem;
 
 public:
-    System() = default;
-    virtual ~System() = 0;
+    System();
+    ~System();
 
     // Getters and setters
     CustomVector<User*> getUserList() const;
     User* getLoggedUser() const;
+    Admin* getSystemAdmin();
+    bool getCloseSystem() const;
 
     void setUserList(CustomVector<User*>&);
     void setLoggedUser(User*);
+    void setSystemAdmin(Admin*);
+    void setCloseSystem(bool);
 
     // Common commands
     void login();
@@ -27,6 +34,7 @@ public:
     void mailBox();
     void clearMailbox();
     void message();
+    void quit();
 
     // Admin commands
     void addTeacher();
@@ -47,5 +55,6 @@ public:
     void grades();
 
     // Auxiliar functions
+    void addAdmin(CustomString);
     void detectCommand(CustomString& cmd);
 };

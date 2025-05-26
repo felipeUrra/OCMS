@@ -1,9 +1,11 @@
 // Felipe Urra Rivadeneira 0MI8000066
 
 #include "assignment.h"
+#include "answer.h"
+#include "users/student.h"
 #include <iostream>
 
-Assignment::Assignment(CustomString& name) : name(name) {}
+Assignment::Assignment(CustomString& name) : name(name), answers() {}
 Assignment::~Assignment() {
     for (uint8_t i = 0; i < answers.getSize(); i++) {
         delete answers[i];

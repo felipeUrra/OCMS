@@ -27,10 +27,12 @@ void Teacher::createAssignment(Course* course, CustomString& name) {
 
 void Teacher::enrollStudent(Course* course, User* student) {course->getStudentsMembers().push_back(student);}
 
-Course* Teacher::getSpecificCourse(CustomString& courseName){
+Course* Teacher::getSpecificCourse(CustomString& courseName){ // change this functions
     for (uint8_t i = 0; i < this->courses.getSize(); i++) {
         if (this->courses[i]->getName() == courseName) {
             return this->courses[i];
         }
-    }  
+    }
+
+    return nullptr;
 }

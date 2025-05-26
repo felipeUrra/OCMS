@@ -1,6 +1,7 @@
 // Felipe Urra Rivadeneira 0MI8000066
 
 #include "student.h"
+#include "../answer.h"
 #include <iostream>
 
 Student::Student(CustomString& name, CustomString& lastName, CustomString& password) :

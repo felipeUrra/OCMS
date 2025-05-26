@@ -1,11 +1,8 @@
 // Felipe Urra Rivadeneira 0MI8000066
 
 #include "mail.h"
+#include "users/user.h"
 #include <iostream>
-
-Mail::Mail() : sender(nullptr) {
-    getActualDateAndTime();
-}
 
 Mail::Mail(User* sender, CustomString text) :
     sender(sender),
@@ -16,12 +13,11 @@ Mail::Mail(User* sender, CustomString text) :
 
 // getters and setters
 User* Mail::getSender() {return this->sender;}
-uint8_t Mail::getIdMail() const{return this->idMail;}
 CustomString Mail::getText() const{return this->text;}
 CustomString Mail::getDate() const{return this->date;}
 CustomString Mail::getTime() const{return this->time;}
 
-void Mail::setSender(User& sender) {this->sender = &sender;}
+void Mail::setSender(User* sender) {this->sender = sender;}
 void Mail::setText(CustomString& text) {this->text = text;}
 
 void Mail::getActualDateAndTime() {

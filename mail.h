@@ -1,32 +1,29 @@
 // Felipe Urra Rivadeneira 0MI8000066
 
 #pragma once
-#include "users/user.h"
+#include "customFunctions/customString.h"
 #include <ctime>
+
+class User;
 
 class Mail {
 private:
-    static uint8_t nextIdMail;
-
     User* sender;
-    uint8_t idMail;
     CustomString text;
     CustomString date;
     CustomString time;
 
 public:
-    Mail();
     Mail(User*, CustomString);
     ~Mail() = default;
 
     // getters and setters
     User* getSender();
-    uint8_t getIdMail() const;
     CustomString getText() const;
     CustomString getDate() const;
     CustomString getTime() const;
 
-    void setSender(User&);
+    void setSender(User*);
     void setText(CustomString&);
 
     void getActualDateAndTime();

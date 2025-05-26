@@ -1,19 +1,33 @@
 // Felipe Urra Rivadeneira 0MI8000066
 
 #include "system.h"
-#include "customFunctions/customString.h"
-#include <stdint.h>
 #include "exceptions.h"
 #include "users/teacher.h"
 #include "users/student.h"
+#include "answer.h"
+#include <iostream>
 
+System::System() : closeSystem(false) {}
+
+System::~System() {
+    for (uint8_t i = 0; i < this->userList.getSize(); i++) {
+        delete userList[i];
+    }
+
+    delete loggedUser;
+    delete systemAdmin;
+}
 
 // Getters and setters
-CustomVector<User*> System::getUserList() const{return userList;}
-User* System::getLoggedUser() const{return loggedUser;}
+CustomVector<User*> System::getUserList() const{return this->userList;}
+User* System::getLoggedUser() const{return this->loggedUser;}
+Admin* System::getSystemAdmin() {return this->systemAdmin;}
+bool System::getCloseSystem() const{return this->closeSystem;}
 
 void System::setUserList(CustomVector<User*>& userList) {this->userList = userList;}
 void System::setLoggedUser(User* loggedUser) {this->loggedUser = loggedUser;}
+void System::setSystemAdmin(Admin* systemAdmin) {this->systemAdmin = systemAdmin;}
+void System::setCloseSystem(bool closeSystem) {this->closeSystem = closeSystem;}
 
 
 // Common commands
@@ -106,6 +120,8 @@ void System::message() {
     std::cout << "There is no user with that ID!\n";
 }
 
+void System::quit() {this->setCloseSystem(true);}
+
 // Admin commands
 void System::addTeacher() {
     CustomString name;
@@ -114,11 +130,11 @@ void System::addTeacher() {
 
     std::cin >> name >> lastName >> password;
 
-    Teacher teacher(name, lastName, password);
-    this->userList.push_back(&teacher);
+    Teacher* teacher = new Teacher(name, lastName, password);
+    this->userList.push_back(teacher);
     //set the email
 
-    std::cout << "Added teacher " << name << " " << lastName << " with ID " << teacher.getId() << "!\n";
+    std::cout << "Added teacher " << name << " " << lastName << " with ID " << teacher->getId() << "!\n";
 }
 
 void System::addStudent() {
@@ -170,7 +186,7 @@ void System::addToCourse() {
     for (uint8_t i = 0; i < this->userList.getSize(); i++) {
         if (this->userList[i]->getId() == studentId && this->userList[i]->getUserType() == UserType::Student) {
             Teacher* t = dynamic_cast<Teacher*>(this->loggedUser);
-            t->enrollStudent(t->getSpecificCourse(courseName), userList[i]);
+            t->enrollStudent(t->getSpecificCourse(courseName), userList[i]); // need to change this
 
             CustomString mailText = this->loggedUser->getName() + " " + this->loggedUser->getLastName() + " added you to " + courseName + ".\n";
             this->loggedUser->sendMail(userList[i], mailText);
@@ -353,7 +369,11 @@ void System::grades() {
 }
 
 // Auxiliar functions
-void System::detectCommand(CustomString& cmd) {
+void System::addAdmin(CustomString password) {
+    if (!Admin::getAdminExists()) {systemAdmin = new Admin("admin", "admin", password);}
+}
+
+void System::detectCommand(CustomString& cmd) { // hacer que haga algo cuando el comando no coincide
     if(loggedUser == nullptr) {
         if(cmd == "login") {login();}
     }else if(loggedUser != nullptr) {
@@ -383,5 +403,6 @@ void System::detectCommand(CustomString& cmd) {
         if(cmd == "mailbox") {mailBox();}
         if(cmd == "clearMailbox") {clearMailbox();}
         if(cmd == "message") {message();}
+        if(cmd == "quit") {quit();}
     }
 }

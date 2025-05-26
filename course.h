@@ -4,6 +4,7 @@
 #include "customFunctions/customString.h"
 #include "customFunctions/customVector.h"
 #include "assignment.h"
+#include "users/user.h"
 
 class Course {
 private:

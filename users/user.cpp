@@ -36,18 +36,7 @@ void User::sendMail(User* addressee, const CustomString& text) {
 }
 
 CustomString User::getStrUserType() const{
-    switch (userType)
-    {
-    case UserType::Admin:
-        return "Admin";
-        break;
-    case UserType::Teacher:
-        return "Teacher";
-        break;
-    case UserType::Student:
-        return "Student";
-        break;
-    default:
-        break;
-    }
+    if (this->userType == UserType::Admin) {return "Administrator";}
+    if (this->userType == UserType::Teacher) {return "Teacher";}
+    else {return "Student";}
 }

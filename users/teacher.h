@@ -3,8 +3,8 @@
 #pragma once
 #include "user.h"
 #include "../course.h"
-#include "customFunctions/customString.h"
-#include "customFunctions/customVector.h"
+#include "../customFunctions/customString.h"
+#include "../customFunctions/customVector.h"
 
 class Teacher : public User {
 private:

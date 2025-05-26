@@ -1,7 +1,11 @@
 // Felipe Urra Rivadeneira 0MI8000066
 
 #pragma once
-#include "answer.h"
+#include "customFunctions/customString.h"
+#include "customFunctions/customVector.h"
+
+class Answer;
+class Student;
 
 class Assignment {
 private:
