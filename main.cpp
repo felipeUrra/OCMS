@@ -6,7 +6,6 @@
 int main() {
     
     System system;
-    system.addAdmin("0000");
 
     while (system.getCloseSystem() == false) {
         std::cout << "> ";
