@@ -39,7 +39,7 @@ void System::login() {
 
     std::cin >> id >> password;
 
-    while (!isdigit(id) && id < 0) {
+    while (!isdigit(id) || id < 0) {
         throw InvalidDataType();
         std::cin >> id >> password;
     }
@@ -271,7 +271,7 @@ void System::gradeAssignment() {
 
     std::cin >> courseName >> assignmentName >> studentId >> grade >> comment;
 
-    while ((!isdigit(studentId) && studentId < 0) || (!isdigit(grade))) {
+    while ((!isdigit(studentId) || studentId < 0) || (!isdigit(grade))) {
         throw InvalidDataType();
         std::cin >> courseName >> assignmentName >> studentId >> grade >> comment;
     }
