@@ -404,3 +404,11 @@ void System::detectCommand(CustomString& cmd) { // hacer que haga algo cuando el
         if(cmd == "quit") {quit();}
     }
 }
+
+User* System::getUserById(uint8_t id) {
+    for (uint8_t i = 0; i < this->userList.getSize(); i++) {
+        if (this->userList[i]->getId() == id) {return userList[i];}
+    }
+    
+    return nullptr;
+}

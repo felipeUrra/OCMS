@@ -56,4 +56,5 @@ public:
 
     // Auxiliar functions
     void detectCommand(CustomString& cmd);
+    User* getUserById(uint8_t);
 };
