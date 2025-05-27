@@ -14,6 +14,12 @@ User::User(CustomString& name, CustomString& lastName, CustomString& password, U
     setEmail();
 }
 
+User::~User() {
+    for (uint8_t i = 0; i < mails.getSize(); i++) {
+        delete mails[i];
+    }
+}
+
 CustomString User::getName() const{return name;}
 CustomString User::getLastName() const{return lastName;}
 uint8_t User::getId() const{return id;}
