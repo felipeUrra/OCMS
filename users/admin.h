@@ -10,7 +10,7 @@ private:
     static void changeAdminExists(bool); // choose a better name
 
 public:
-    Admin(CustomString, CustomString, CustomString&);
+    Admin(CustomString, CustomString, CustomString);
     ~Admin() = default;
 
     static bool getAdminExists();
