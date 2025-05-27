@@ -34,36 +34,58 @@ void System::setCloseSystem(bool closeSystem) {this->closeSystem = closeSystem;}
 
 // Common commands
 void System::login() {
-    uint8_t id;
+    CustomString idInput;
     CustomString password;
 
-    std::cin >> id >> password;
+    std::cin >> idInput >> password;
 
-    while (!isdigit(id) || id < 0) {
+    // meter esto en una funcion;
+    for (uint8_t i = 0; i < idInput.getSize(); i++) {
+        if (!isdigit(idInput[i])) {
+            throw InvalidDataType();
+        }
+    }
+
+    int idValue = 0;
+    for (uint8_t i = 0; i < idInput.getSize(); i++) {
+        idValue += (idInput[i] * 10);
+    }
+    idValue /= 10;
+
+    if (idValue < 0) {
         throw InvalidDataType();
-        std::cin >> id >> password;
     }
+
+    uint8_t id = static_cast<uint8_t>(idValue);
+
+    // while (!isdigit(id) || id < 0) {
+    //     throw InvalidDataType();
+    //     std::cin >> id >> password;
+    // }
     
-
-    for (uint8_t i = 0; i < this->userList.getSize(); i++) {
-        if (id == this->userList[i]->getId()) {
-
-            if (password == this->userList[i]->getPassword()) {
-                setLoggedUser(this->userList[i]);
-                std::cout << "Login successful!\n";
-                if (this->loggedUser->getUserType() != UserType::Admin) {
-                    std::cout << this->loggedUser->getName() << " " << this->loggedUser->getLastName() << " | " << this->loggedUser->getStrUserType() << " | " << this->loggedUser->getId();
-                }
-                
-                return;
-            }
-            
-            std::cout << "Wrong password! Try again.\n";
+    User* user = nullptr;
+    if (id == 0) {
+        user = systemAdmin;
+    } else {
+        user = getUserById(id);
+        if (user == nullptr) {
+            std::cout << "There isn't user with that ID!\n";
             return;
-        }        
+        }
     }
-    
-    std::cout << "There is no user with that ID!\n";
+
+    if (user->getPassword() == password) {
+        this->loggedUser = user;
+        user = nullptr;
+
+        std::cout << "Login successful!\n";
+        if (this->loggedUser->getUserType() != UserType::Admin) {
+            std::cout << this->loggedUser->getName() << " " << this->loggedUser->getLastName() << " | " << this->loggedUser->getStrUserType() << " | " << this->loggedUser->getId();
+        }
+        return;
+    }
+
+    std::cout << "Wrong password!\n";
 }
 
 void System::logout() {
