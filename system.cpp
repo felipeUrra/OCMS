@@ -7,7 +7,9 @@
 #include "answer.h"
 #include <iostream>
 
-System::System() : closeSystem(false) {}
+System::System() : closeSystem(false) {
+    this->systemAdmin = new Admin("admin", "admin", "0000");
+}
 
 System::~System() {
     for (uint8_t i = 0; i < this->userList.getSize(); i++) {
@@ -369,10 +371,6 @@ void System::grades() {
 }
 
 // Auxiliar functions
-void System::addAdmin(CustomString password) {
-    if (!Admin::getAdminExists()) {systemAdmin = new Admin("admin", "admin", password);}
-}
-
 void System::detectCommand(CustomString& cmd) { // hacer que haga algo cuando el comando no coincide
     if(loggedUser == nullptr) {
         if(cmd == "login") {login();}

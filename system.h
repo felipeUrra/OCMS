@@ -55,6 +55,5 @@ public:
     void grades();
 
     // Auxiliar functions
-    void addAdmin(CustomString);
     void detectCommand(CustomString& cmd);
 };
