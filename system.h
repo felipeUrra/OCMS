@@ -28,23 +28,23 @@ public:
     void setCloseSystem(bool);
 
     // Common commands
-    void login();
-    void logout();
-    void changePassword();
-    void mailBox();
-    void clearMailbox();
-    void message();
-    void quit();
+    void login(); //ready
+    void logout(); //ready
+    void changePassword(); //ready
+    void mailBox(); //ready
+    void clearMailbox(); //ready
+    void message(); //ready
+    void quit(); //ready
 
     // Admin commands
-    void addTeacher();
-    void addStudent();
-    void messageAll();
+    void addTeacher(); //ready
+    void addStudent(); //ready
+    void messageAll(); //ready
 
     // Teacher commands
-    void createCourse();
-    void addToCourse();
-    void assignHomework();
+    void createCourse(); //ready - solo si no hay algun curso con ese nombre ya
+    void addToCourse(); //ready
+    void assignHomework(); //ready
     void messageStudents(); // of a specific course
     void viewAssignmentSubmissions();
     void gradeAssignment();
@@ -56,7 +56,8 @@ public:
 
     // Auxiliar functions
     void detectCommand(CustomString& cmd);
-    User* getUserById(int);
+    User* getUserById(int id);
+    bool isUserA(User* user, UserType role) const;
 
     // Serialize/deserialize
     void serialize(std::ofstream& out) const;

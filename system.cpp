@@ -153,7 +153,6 @@ void System::addStudent() {
 
     Student* student = new Student(name, lastName, password);
     this->userList.push_back(student);
-    //set the email
 
     std::cout << "Added student " << name << " " << lastName << " with ID " << student->getId() << "!\n";
 }
@@ -192,17 +191,29 @@ void System::addToCourse() { //solo si el estudiante no esta en el curso
         std::cin >> courseName >> studentId;
     }
 
-    for (uint8_t i = 0; i < this->userList.getSize(); i++) {
-        if (this->userList[i]->getId() == studentId && this->userList[i]->getUserType() == UserType::Student) {
-            Teacher* t = dynamic_cast<Teacher*>(this->loggedUser);
-            t->enrollStudent(t->getSpecificCourse(courseName), dynamic_cast<Student*>(this->userList[i])); // need to change this
-
-            CustomString mailText = this->loggedUser->getName() + " " + this->loggedUser->getLastName() + " added you to " + courseName + ".\n";
-            this->loggedUser->sendMail(userList[i], mailText);
-            return;
-        }
+    User* u = getUserById(studentId);
+    if (u == nullptr) {
+        std::cout << "There is no user with that ID!\n";
+        return;
     }
 
+    Student* s;
+    if (isUserA(u, UserType::Student)) {
+        s = dynamic_cast<Student*>(u);
+
+        if (s->hasCourse(courseName)){
+            std::cout << "That student is already in this course\n";
+            return;
+        }
+        
+        Teacher* t = dynamic_cast<Teacher*>(this->loggedUser);
+        t->enrollStudent(t->getCourseByName(courseName), s); // need to change this
+
+        CustomString mailText = this->loggedUser->getName() + " " + this->loggedUser->getLastName() + " added you to " + courseName + ".\n";
+        this->loggedUser->sendMail(s, mailText);
+        return;
+    }
+    
     std::cout << "There is no student with that ID!\n";
 }
 
@@ -214,15 +225,19 @@ void System::assignHomework() {
 
     Teacher* t = dynamic_cast<Teacher*>(this->loggedUser);
 
-    for (uint8_t i = 0; i < t->getCourses().getSize(); i++) {
-        if (t->getCourses()[i]->getName() == courseName) {
-            t->createAssignment(t->getCourses()[i], assignmentName);
-            std::cout << "Successfully created a new assignment!\n";
-            return;
-        }
+    Course* course = t->getCourseByName(courseName);
+    if (course == nullptr) {
+        std::cout << "You don't have any course with that name!\n";
+        return;
     }
 
-    std::cout << "You don't have any course with that name!\n";
+    if (course->hasAssignment(assignmentName)) {
+        std::cout << "You already have an assignment with that name!\n";
+        return;
+    }
+
+    t->createAssignment(course, assignmentName);
+    std::cout << "Successfully created a new assignment!\n";
 }
 
 void System::messageStudents() {
@@ -483,6 +498,11 @@ User* System::getUserById(int id) {
     }
     
     return nullptr;
+}
+
+bool System::isUserA(User* user, UserType role) const {
+    if (user->getUserType() == role) return true;
+    return false;
 }
 
 // Serialize/deserialize

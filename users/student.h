@@ -2,6 +2,7 @@
 
 #pragma once
 #include "user.h"
+#include "../assignment.h"
 
 class Course; // Forward declaration
 class Student : public User {
@@ -18,6 +19,8 @@ public:
     void setCoursesEnrolled(CustomVector<Course*>&);
 
     void printGradesInfo(); // CourseName | AssignmentName | Grade | TeacherComment
+    bool hasCourse(CustomString& courseName) const;
+    bool hasAssignment(CustomString& assignmentName) const;
 
     // Serialize/deserialize
     void serialize(std::ofstream& out) const;

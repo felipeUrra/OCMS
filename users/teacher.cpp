@@ -30,7 +30,7 @@ void Teacher::enrollStudent(Course* course, Student* student) {
     student->getCoursesEnrolled().push_back(course);
 }
 
-Course* Teacher::getSpecificCourse(CustomString& courseName){ // change this functions
+Course* Teacher::getCourseByName(CustomString& courseName){ // change this functions
     for (uint8_t i = 0; i < this->courses.getSize(); i++) {
         if (this->courses[i]->getName() == courseName) {
             return this->courses[i];

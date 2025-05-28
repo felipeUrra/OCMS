@@ -23,7 +23,7 @@ public:
     void createCourse(CustomString&, CustomString&);
     void createAssignment(Course*, CustomString&);
     void enrollStudent(Course*, Student*);
-    Course* getSpecificCourse(CustomString&); // by courseName
+    Course* getCourseByName(CustomString&);
 
     // Serialize/deserialize
     void serialize(std::ofstream& out) const;

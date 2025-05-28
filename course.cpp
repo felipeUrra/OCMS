@@ -34,6 +34,17 @@ void Course::setStudentsMembers(CustomVector<Student*>& studentsMembers) {
     // maybe write something or handle it like a exception
 }
 
+
+bool Course::hasAssignment(CustomString& assignmentName) const {
+    for (int i = 0; i < this->assignments.getSize(); i++) {
+        if (this->assignments[i]->getName() == assignmentName) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
 // Serialize/deserialize
     void Course::serialize(std::ofstream& out) const {
         this->name.serialize(out);
