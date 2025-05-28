@@ -56,5 +56,9 @@ public:
 
     // Auxiliar functions
     void detectCommand(CustomString& cmd);
-    User* getUserById(uint8_t);
+    User* getUserById(int);
+
+    // Serialize/deserialize
+    void serialize(std::ofstream& out) const;
+    void deserialize(std::ifstream& in);
 };

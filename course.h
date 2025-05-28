@@ -5,15 +5,17 @@
 #include "customFunctions/customVector.h"
 #include "assignment.h"
 #include "users/user.h"
+#include "users/student.h"
 
 class Course {
 private:
     CustomString name;
     CustomString password;
     CustomVector<Assignment*> assignments;
-    CustomVector<User*> studentsMembers;
+    CustomVector<Student*> studentsMembers;
 
 public:
+    Course() = default;
     Course(const CustomString&, const CustomString&);
     ~Course();
 
@@ -21,10 +23,14 @@ public:
     CustomString getName() const;
     CustomString getPassword() const;
     CustomVector<Assignment*>& getAssignments();
-    CustomVector<User*>& getStudentsMembers();
+    CustomVector<Student*>& getStudentsMembers();
 
     void setName(CustomString&);
     void setPassword(CustomString&);
     void setAssignments(CustomVector<Assignment*>&);
-    void setStudentsMembers(CustomVector<User*>&);
+    void setStudentsMembers(CustomVector<Student*>&);
+
+    // Serialize/deserialize
+    void serialize(std::ofstream& out) const;
+    void deserialize(std::ifstream& in, const CustomVector<Student*>& students);
 };

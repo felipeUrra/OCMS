@@ -4,7 +4,7 @@
 
 Course::Course(const CustomString& name, const CustomString& password) : name(name), password(password) {}
 Course::~Course() {
-    for (uint8_t i = 0; i < this->assignments.getSize(); i++) {
+    for (int i = 0; i < this->assignments.getSize(); i++) {
         delete this->assignments[i];
     }
 }
@@ -14,15 +14,15 @@ Course::~Course() {
 CustomString Course::getName() const{return this->name;}
 CustomString Course::getPassword() const{return this->password;}
 CustomVector<Assignment*>& Course::getAssignments() {return this->assignments;}
-CustomVector<User*>& Course::getStudentsMembers() {return this->studentsMembers;}
+CustomVector<Student*>& Course::getStudentsMembers() {return this->studentsMembers;}
 
 void Course::setName(CustomString& name) {this->name = name;}
 void Course::setPassword(CustomString& password) {this->password = password;}
 void Course::setAssignments(CustomVector<Assignment*>& assigments) {this->assignments = assigments;}
-void Course::setStudentsMembers(CustomVector<User*>& studentsMembers) {
+void Course::setStudentsMembers(CustomVector<Student*>& studentsMembers) {
     
-    uint8_t count = 0;
-    for (uint8_t i = 0; i < studentsMembers.getSize(); i++) {
+    int count = 0;
+    for (int i = 0; i < studentsMembers.getSize(); i++) {
         if (studentsMembers[i]->getUserType() == UserType::Student) {count++;}
     }
     
@@ -33,3 +33,52 @@ void Course::setStudentsMembers(CustomVector<User*>& studentsMembers) {
     
     // maybe write something or handle it like a exception
 }
+
+// Serialize/deserialize
+    void Course::serialize(std::ofstream& out) const {
+        this->name.serialize(out);
+        this->password.serialize(out);
+
+        int assignSize = assignments.getSize();
+        out.write(reinterpret_cast<const char*>(&assignSize), sizeof(assignSize));
+        for (int i = 0; i < assignSize; i++) {
+            assignments[i]->serialize(out);
+        }
+        
+        int studentCount = studentsMembers.getSize();
+        out.write(reinterpret_cast<const char*>(&studentCount), sizeof(studentCount));
+        for (int i = 0; i < studentCount; i++) {
+            int id = studentsMembers[i]->getId();
+            out.write(reinterpret_cast<const char*>(&id), sizeof(id));
+        }
+    }
+    void Course::deserialize(std::ifstream& in, const CustomVector<Student*>& students) {
+        this->name.deserialize(in);
+        this->password.deserialize(in);
+
+        int assignSize;
+        in.read(reinterpret_cast<char*>(&assignSize), sizeof(assignSize));
+        // for (size_t i = 0; i < assignments.getSize(); ++i) {
+        //     delete assignments[i];
+        // }
+        // this->assignments.clear();
+        for (int i = 0; i < assignSize; i++) {
+            Assignment* a = new Assignment();
+            a->deserialize(in, students);
+            this->assignments.push_back(a);
+        }
+        
+        int studentsCount;
+        in.read(reinterpret_cast<char*>(&studentsCount), sizeof(studentsCount));
+        //this->studentsMembers.clear();
+        for (int i = 0; i < studentsCount; i++) {
+            int sid;
+            in.read(reinterpret_cast<char*>(&sid), sizeof(sid));
+            for (int i = 0; i < students.getSize(); i++) {
+                if (students[i]->getId() == sid) {
+                    studentsMembers.push_back(students[i]);
+                    break;
+                }
+            }
+        }
+    }

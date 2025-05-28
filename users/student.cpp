@@ -2,6 +2,7 @@
 
 #include "student.h"
 #include "../answer.h"
+#include "../course.h"
 #include <iostream>
 
 Student::Student(CustomString& name, CustomString& lastName, CustomString& password) :
@@ -23,3 +24,33 @@ void Student::printGradesInfo() {
         }
     }
 }
+
+// Serialize/deserialize
+    void Student::serialize(std::ofstream& out) const {
+        User::serialize(out);
+
+        int courseCount = this->coursesEnrolled.getSize();
+        out.write(reinterpret_cast<const char*>(&courseCount), sizeof(courseCount));
+        for (int i = 0; i < courseCount; i++) {
+            this->coursesEnrolled[i]->getName().serialize(out);
+        }
+    }
+    void Student::deserialize(std::ifstream& in, const CustomVector<Course*>& courses) {
+        User::deserialize(in);
+
+        int courseCount;
+        in.read(reinterpret_cast<char*>(&courseCount), sizeof(courseCount));
+        this->coursesEnrolled.clear();
+
+        for (int i = 0; i < courseCount; i++) {
+            CustomString courseName;
+            courseName.deserialize(in);
+
+            for (int j = 0; j < courses.getSize(); j++) {
+                if (courses[j]->getName() == courseName) {
+                    this->coursesEnrolled.push_back(courses[j]);
+                    break;
+                }
+            }
+        }
+    }

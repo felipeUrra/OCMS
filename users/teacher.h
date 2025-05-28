@@ -2,6 +2,7 @@
 
 #pragma once
 #include "user.h"
+#include "student.h"
 #include "../course.h"
 #include "../customFunctions/customString.h"
 #include "../customFunctions/customVector.h"
@@ -11,6 +12,7 @@ private:
     CustomVector<Course*> courses;
 
 public:
+    Teacher() = default;
     Teacher(CustomString&, CustomString&, CustomString&);
     ~Teacher();
 
@@ -20,6 +22,10 @@ public:
 
     void createCourse(CustomString&, CustomString&);
     void createAssignment(Course*, CustomString&);
-    void enrollStudent(Course*, User*);
+    void enrollStudent(Course*, Student*);
     Course* getSpecificCourse(CustomString&); // by courseName
+
+    // Serialize/deserialize
+    void serialize(std::ofstream& out) const;
+    void deserialize(std::ifstream& in, const CustomVector<Student*>& students);
 };

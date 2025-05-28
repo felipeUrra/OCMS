@@ -13,6 +13,7 @@ private:
     CustomVector<Answer*> answers;
 
 public:
+    Assignment() = default;
     Assignment(CustomString&);
     ~Assignment();
 
@@ -25,4 +26,8 @@ public:
 
     void addAnswer(Student*, CustomString&);
     void printAnswers(); // Student Name, StudentLastName, StudentId: AnswerText
+
+    // Serialize/deserialize
+    void serialize(std::ofstream& out) const;
+    void deserialize(std::ifstream& in, const CustomVector<Student*>& students);
 };

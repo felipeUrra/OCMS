@@ -35,6 +35,21 @@ void Mail::getActualDateAndTime() {
     time = buffTime;
 }
 
-void Mail::print() {
-    std::cout << time << " " << date << ", sent by " << sender->getName() << " " << sender->getLastName() << ": " << text;
+void Mail::print(){
+    std::cout << time << " " << date << ", sent by " << sender->getName() << " " << sender->getLastName() << ": " << text << "\n";
 }
+
+// Serialize/deserialize
+    void Mail::serialize(std::ofstream& out) const {
+        this->sender->serialize(out);
+        this->text.serialize(out);
+        this->date.serialize(out);
+        this->time.serialize(out);
+    }
+
+    void Mail::deserialize(std::ifstream& in) {
+        this->sender->deserialize(in);
+        this->text.deserialize(in);
+        this->date.deserialize(in);
+        this->time.deserialize(in);
+    }

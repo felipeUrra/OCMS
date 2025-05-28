@@ -5,43 +5,49 @@
 #include "../customFunctions/customVector.h"
 #include "../mail.h"
 #include <stdint.h>
+#include <fstream>
 
 enum class UserType {Admin = 1, Teacher = 2, Student = 3};
 
 class User {
 private:
-    static uint8_t nextId;
+    static int nextId;
 
     CustomString name;
     CustomString lastName;
-    uint8_t id;
+    int id;
     CustomString password;
-    CustomString email;
-    CustomVector<Mail*> mails;
+    CustomVector<Mail*> inbox;
     UserType userType;
 
 public:
+    User() = default;
     User(CustomString&, CustomString&, CustomString&, UserType);
     virtual ~User() = 0;
 
     // Getters and setters
     CustomString getName() const;
     CustomString getLastName() const;
-    uint8_t getId() const;
+    int getId() const;
     CustomString getPassword() const;
-    CustomString getEmail() const;
-    CustomVector<Mail*>& getMails();
+    CustomVector<Mail*>& getInbox();
     UserType getUserType() const;
+    static int getNextId();
 
-    void setName(CustomString&);
-    void setLastName(CustomString&);
-    void setPassword(CustomString&);
-    void setEmail();
-    void setMail(CustomVector<Mail*>&);
-    void setUserType(UserType);
+    void setName(CustomString& name);
+    void setLastName(CustomString& lastName);
+    void setPassword(CustomString& password);
+    void setInbox(CustomVector<Mail*>& inbox);
+    void setUserType(UserType userType);
+    static void setNextId(int nextId);
     
     
     void sendMail(User*, const CustomString&);
     CustomString getStrUserType() const;
-    
+    void printInbox();
+    bool isInboxEmpty() const;
+
+    // Serialize/deserialize
+    void serialize(std::ofstream& out) const;
+    void deserialize(std::ifstream& in);
 };

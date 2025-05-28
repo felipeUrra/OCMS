@@ -14,6 +14,7 @@ private:
     CustomString time;
 
 public:
+    Mail() = default;
     Mail(User*, CustomString);
     ~Mail() = default;
 
@@ -28,4 +29,8 @@ public:
 
     void getActualDateAndTime();
     void print();
+
+    // Serialize/deserialize
+    void serialize(std::ofstream& out) const;
+    void deserialize(std::ifstream& in);
 };

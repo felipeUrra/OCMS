@@ -5,6 +5,7 @@
 #include "customFunctions/customVector.h"
 #include "users/student.h"
 #include <stdint.h>
+#include <fstream>
 
 class Answer {
 private:
@@ -15,6 +16,7 @@ private:
     bool isGraded;
 
 public:
+    Answer() = default;
     Answer(Student*, CustomString&);
     ~Answer() = default;
 
@@ -30,4 +32,8 @@ public:
     void setTeacherCommet(CustomString&);
     void setGrade(double);
     void setIsGraded(bool);
+
+    // Serialize/deserialize
+    void serialize(std::ofstream& out) const;
+    void deserialize(std::ifstream& in, const CustomVector<Student*>& students);
 };

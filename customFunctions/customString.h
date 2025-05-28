@@ -3,6 +3,7 @@
 #pragma once
 
 #include <iostream>
+#include <fstream>
 
 namespace Constants
 {
@@ -37,6 +38,10 @@ public:
 
 	size_t getSize() const;
 	size_t getCapacity() const;
+
+	// Serialize/deserialize
+	void serialize(std::ofstream& out) const;
+    void deserialize(std::ifstream& in);
 
 	const char& operator[](size_t idx) const;
 	char& operator[](size_t idx);

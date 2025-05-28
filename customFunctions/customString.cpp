@@ -2,6 +2,7 @@
 
 #include "customString.h"
 #include "cstring"
+#include <stdexcept>
 
 CustomString::CustomString() : CustomString("")
 {
@@ -48,6 +49,28 @@ size_t CustomString::getCapacity() const
 {
 	return this->capacity;
 }
+
+// Serialize/deserialize
+void CustomString::serialize(std::ofstream& out) const {
+	int len = this->size;
+	out.write(reinterpret_cast<const char*>(&len), sizeof(len));
+	out.write(this->data, len);
+}
+void CustomString::deserialize(std::ifstream& in) {
+	int len;
+	in.read(reinterpret_cast<char*>(&len), sizeof(len));
+	if (len < 0 || len > 10000) { // límite arbitrario razonable
+        throw std::runtime_error("String length out of bounds");
+    }
+
+	delete[] this->data;
+	this->data = new char[len + 1];
+	in.read(this->data, len);
+	this->data[len] = '\0';
+	this->size = len;
+	this->capacity = len + 1;
+}
+
 
 const char& CustomString::operator[](size_t idx) const
 {
