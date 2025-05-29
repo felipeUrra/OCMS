@@ -17,7 +17,7 @@ void Student::printGradesInfo() {
         for (int j = 0; j < this->coursesEnrolled[i]->getAssignments().getSize(); j++) {
             for (int k = 0; k < this->coursesEnrolled[i]->getAssignments()[j]->getAnswers().getSize(); k++) {
                 Answer* a = this->coursesEnrolled[i]->getAssignments()[j]->getAnswers()[k];
-                if (a->getStudent()->getId() == this->getId() && a->getIsGraded() == true) {
+                if (a->getStudentId() == this->getId() && a->getIsGraded() == true) {
                     std::cout << this->coursesEnrolled[i]->getName() << " | " << this->coursesEnrolled[i]->getAssignments()[j] << " | " << a->getGrade() << " | " << a->getTeacherComment() << "\n";
                 }              
             }
@@ -45,31 +45,30 @@ bool Student::hasAssignment(CustomString& assignmentName) const{
 }
 
 // Serialize/deserialize
-    void Student::serialize(std::ofstream& out) const {
-        User::serialize(out);
-
-        int courseCount = this->coursesEnrolled.getSize();
-        out.write(reinterpret_cast<const char*>(&courseCount), sizeof(courseCount));
-        for (int i = 0; i < courseCount; i++) {
-            this->coursesEnrolled[i]->getName().serialize(out);
-        }
+void Student::serialize(std::ofstream& out) const {
+    this->serializeCommon(out);
+    int courseCount = this->coursesEnrolled.getSize();
+    out.write(reinterpret_cast<const char*>(&courseCount), sizeof(courseCount));
+    for (int i = 0; i < courseCount; i++) {
+        this->coursesEnrolled[i]->getName().serialize(out);
     }
-    void Student::deserialize(std::ifstream& in, const CustomVector<Course*>& courses) {
-        User::deserialize(in);
+}
+void Student::deserialize(std::ifstream& in, const CustomVector<Course*>& courses) {
+    this->deserializeCommon(in);
 
-        int courseCount;
-        in.read(reinterpret_cast<char*>(&courseCount), sizeof(courseCount));
-        this->coursesEnrolled.clear();
+    int courseCount;
+    in.read(reinterpret_cast<char*>(&courseCount), sizeof(courseCount));
+    this->coursesEnrolled.clear();
 
-        for (int i = 0; i < courseCount; i++) {
-            CustomString courseName;
-            courseName.deserialize(in);
-
-            for (int j = 0; j < courses.getSize(); j++) {
-                if (courses[j]->getName() == courseName) {
-                    this->coursesEnrolled.push_back(courses[j]);
-                    break;
-                }
+    for (int i = 0; i < courseCount; i++) {
+        CustomString courseName;
+        courseName.deserialize(in);
+        for (int j = 0; j < courses.getSize(); j++) {
+            if (courses[j]->getName() == courseName) {
+                courses[j]->getStudentsMembers().push_back(this);
+                this->coursesEnrolled.push_back(courses[j]);
+                break;
             }
         }
     }
+}

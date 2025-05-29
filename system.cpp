@@ -96,7 +96,7 @@ void System::mailBox() {
         return;
     }
     
-    this->loggedUser->printInbox();
+    this->loggedUser->printInbox(this->userList); //pasarle tambien el admin
 }
 
 void System::clearMailbox() {
@@ -177,6 +177,11 @@ void System::createCourse() {
     std::cin >> courseName >> password;
 
     Teacher* t = dynamic_cast<Teacher*>(loggedUser);
+    if (t->getCourseByName(courseName) != nullptr) {
+        std::cout << "You already have one course with that name!\n";
+        return;
+    }
+    
     t->createCourse(courseName, password);
 }
 
@@ -202,14 +207,19 @@ void System::addToCourse() { //solo si el estudiante no esta en el curso
         s = dynamic_cast<Student*>(u);
 
         if (s->hasCourse(courseName)){
-            std::cout << "That student is already in this course\n";
+            std::cout << "That student is already in this course!\n";
             return;
         }
         
         Teacher* t = dynamic_cast<Teacher*>(this->loggedUser);
+        Course* c = t->getCourseByName(courseName);
+        if (c == nullptr) {
+            std::cout << "You don't have any course with that name!\n";
+        }
+        
         t->enrollStudent(t->getCourseByName(courseName), s); // need to change this
 
-        CustomString mailText = this->loggedUser->getName() + " " + this->loggedUser->getLastName() + " added you to " + courseName + ".\n";
+        CustomString mailText = this->loggedUser->getName() + " " + this->loggedUser->getLastName() + " added you to " + courseName;
         this->loggedUser->sendMail(s, mailText);
         return;
     }
@@ -251,16 +261,15 @@ void System::messageStudents() {
 
     Teacher* t = dynamic_cast<Teacher*>(this->loggedUser);
 
-    for (uint8_t i = 0; i < t->getCourses().getSize(); i++) {
-        if (t->getCourses()[i]->getName() == courseName) {  
-            for (int j = 0; j < t->getCourses()[i]->getStudentsMembers().getSize(); j++) {
-                t->sendMail(t->getCourses()[i]->getStudentsMembers()[j], mailText);
-            }
-            return;
-        }
+    Course* course = t->getCourseByName(courseName);
+    if (course == nullptr) {
+        std::cout << "You don't have any courses with that name!\n";
+        return;
     }
 
-    std::cout << "You don't have any courses with that name!\n";
+    for (int i = 0; i < course->getStudentsMembers().getSize(); i++) {
+        t->sendMail(course->getStudentsMembers()[i], mailText);
+    }
 }
 
 void System::viewAssignmentSubmissions() {
@@ -271,20 +280,19 @@ void System::viewAssignmentSubmissions() {
 
     Teacher* t = dynamic_cast<Teacher*>(this->loggedUser);
 
-    for (uint8_t i = 0; i < t->getCourses().getSize(); i++) {
-        if (t->getCourses()[i]->getName() == courseName) {
-            for (uint8_t j = 0; j < t->getCourses()[i]->getAssignments().getSize(); j++) {
-                if (t->getCourses()[i]->getAssignments()[j]->getName() == assignmentName) {
-                    t->getCourses()[i]->getAssignments()[j]->printAnswers();
-                    return;
-                }
-            }
-            std::cout << "This course doesn't have any assignments with that name!\n";
-            return;
-        }
+    Course* course = t->getCourseByName(courseName);
+    if (course == nullptr) {
+        std::cout << "You don't have any courses with that name!\n";
+        return;
+    }
+    
+    Assignment* assignment = course->getAssignmentByName(assignmentName);
+    if (assignment == nullptr) {
+        std::cout << "This course doesn't have any assignments with that name!\n";
+        return;
     }
 
-    std::cout << "You don't have any courses with that name!\n";
+    assignment->printAnswers(course->getStudentsMembers());
 }
 
 void System::gradeAssignment() {
@@ -308,7 +316,7 @@ void System::gradeAssignment() {
             for (uint8_t j = 0; j < t->getCourses()[i]->getAssignments().getSize(); j++) {
                 if (t->getCourses()[i]->getAssignments()[j]->getName() == assignmentName) {
                     for (uint8_t k = 0; k < t->getCourses()[i]->getAssignments()[j]->getAnswers().getSize(); k++) {
-                        if (t->getCourses()[i]->getAssignments()[j]->getAnswers()[k]->getStudent()->getId() == studentId) {
+                        if (t->getCourses()[i]->getAssignments()[j]->getAnswers()[k]->getStudentId() == studentId) {
                             t->getCourses()[i]->getAssignments()[j]->getAnswers()[k]->setGrade(grade);
                             t->getCourses()[i]->getAssignments()[j]->getAnswers()[k]->setTeacherCommet(comment);
                             t->getCourses()[i]->getAssignments()[j]->getAnswers()[k]->setIsGraded(true);
@@ -335,7 +343,7 @@ void System::gradeAssignment() {
 }
 
 // Student commands
-void System::enroll() { // solo si el estudiante no esta en el cursoS
+void System::enroll() { // solo si el estudiante no esta en el curso
     CustomString courseName;
     CustomString coursePassword;
 
@@ -347,22 +355,30 @@ void System::enroll() { // solo si el estudiante no esta en el cursoS
         if (userList[i]->getUserType() == UserType::Teacher) {
             Teacher* t = dynamic_cast<Teacher*>(this->userList[i]);
 
-            for (uint8_t j = 0; j < t->getCourses().getSize(); j++) {
-                if (t->getCourses()[j]->getName() == courseName) {
-                    if (t->getCourses()[j]->getPassword() == coursePassword) {
-                        t->enrollStudent(t->getCourses()[j], s);
-                        s->getCoursesEnrolled().push_back(t->getCourses()[j]);
-                        std::cout << "Successfully enrolled in " + courseName + ".\n";
-                        return;
-                    }
-                    std::cout << "Incorrect password.\n";
+            Course* c = t->getCourseByName(courseName);
+            if (c == nullptr) {
+                std::cout << "Theres is no course with that name!\n";
+                return;
+            }
+            
+            if (c->getPassword() == coursePassword) {
+                if (s->hasCourse(courseName)) {
+                    std::cout << "You are already enrolled in that course!\n";
                     return;
                 }
+                
+                t->enrollStudent(c, s);
+                s->getCoursesEnrolled().push_back(c);
+                std::cout << "Successfulle enrolled in " + courseName + ".\n";
+                return;
             }
+            
+            std::cout << "Incorrect password.\n";
+            return;
         }
     }
 
-    std::cout << "Theres is no course with that name!\n";
+    std::cout << "There are no courses to enroll in!\n";
 }
 
 void System::submitAssignment() { //solo si no hay una submission del estudiante para esa tarea
@@ -506,68 +522,49 @@ bool System::isUserA(User* user, UserType role) const {
 }
 
 // Serialize/deserialize
-    void System::serialize(std::ofstream& out) const {
-        int userCount = this->userList.getSize();
-        out.write(reinterpret_cast<const char*>(&userCount), sizeof(userCount));
-        for (int i = 0; i < userCount; i++) {
-            int userTypeVal = static_cast<int>(this->userList[i]->getUserType());
-            out.write(reinterpret_cast<const char*>(&userTypeVal), sizeof(userTypeVal));
+void System::serialize(std::ofstream& out) const {
+    int userCount = this->userList.getSize();
+    out.write(reinterpret_cast<const char*>(&userCount), sizeof(userCount));
+    for (int i = 0; i < userCount; i++) {
+        if (userList[i]->getUserType() == UserType::Student) continue;
 
-            if 
-            this->userList[i]->serialize(out);
+        int userTypeVal = static_cast<int>(this->userList[i]->getUserType());
+        out.write(reinterpret_cast<const char*>(&userTypeVal), sizeof(userTypeVal));
+        this->userList[i]->serialize(out);
+    }
+
+    for (int i = 0; i < userCount; i++) {
+        if (userList[i]->getUserType() == UserType::Teacher) continue;
+
+        int userTypeVal = static_cast<int>(this->userList[i]->getUserType());
+        out.write(reinterpret_cast<const char*>(&userTypeVal), sizeof(userTypeVal));
+        this->userList[i]->serialize(out);
+    }
+}
+
+void System::deserialize(std::ifstream& in) {
+    // Deserialize user list
+    int userCount;
+    in.read(reinterpret_cast<char*>(&userCount), sizeof(userCount));
+    CustomVector<Course*> allCourses;
+    for (int i = 0; i < userCount; i++) {
+        int userTypeVal;
+        in.read(reinterpret_cast<char*>(&userTypeVal), sizeof(userTypeVal));
+        UserType type = static_cast<UserType>(userTypeVal);
+
+        User* u = nullptr;
+        if (type == UserType::Teacher) {
+            u = new Teacher();
+            dynamic_cast<Teacher*>(u)->deserialize(in);
+            allCourses += static_cast<Teacher*>(u)->getCourses();
+        } else {
+            u = new Student();
+            dynamic_cast<Student*>(u)->deserialize(in, allCourses);
         }
 
-        int next = User::getNextId();
-        out.write(reinterpret_cast<const char*>(&next), sizeof(next));
-
-        //int adminId = this->systemAdmin ? this->systemAdmin->getId() : -1;
-        //out.write(reinterpret_cast<const char*>(&adminId), sizeof(adminId));
-    }
-    void System::deserialize(std::ifstream& in) {
-        // Limpiamos estado anterior
-        // esto quizas si
-        // for (size_t i = 0; i < userList.getSize(); ++i) {
-        //     delete userList[i];
-        // }
-        // userList.clear();
-
-        //delete systemAdmin;
-        //systemAdmin = nullptr;
-
-        // Leemos closeSystem
-        //in.read(reinterpret_cast<char*>(&closeSystem), sizeof(closeSystem));
-
-        // Deserialize systemAdmin
-        //bool hasAdmin;
-        //in.read(reinterpret_cast<char*>(&hasAdmin), sizeof(hasAdmin));
-        //if (hasAdmin) {
-        //    systemAdmin = new Admin();
-        //    systemAdmin->deserialize(in);
-        //}
-
-        // Deserialize user list
-        int userCount;
-        in.read(reinterpret_cast<char*>(&userCount), sizeof(userCount));
-        for (int i = 0; i < userCount; ++i) {
-            int userTypeVal;
-            in.read(reinterpret_cast<char*>(&userTypeVal), sizeof(userTypeVal));
-            UserType type = static_cast<UserType>(userTypeVal);
-
-            User* u = nullptr;
-            if (type == UserType::Student) {
-                u = new Student();
-                static_cast<Student*>(u)->deserialize(in, /* allCourses */ {}); // pasa cursos si es necesario
-            } else if (type == UserType::Teacher) {
-                u = new Teacher();
-                static_cast<Teacher*>(u)->deserialize(in, /* allCourses */ {}); // igual
-            }
-
-            if (u != nullptr) {
-                userList.push_back(u);
-            }
+        if (u != nullptr) {
+            userList.push_back(u);
         }
-
-        int next;
-        in.read(reinterpret_cast<char*>(&next), sizeof(next));
-        User::setNextId(next);
     }
+    User::setNextId(userCount + 1);
+}

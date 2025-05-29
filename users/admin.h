@@ -13,4 +13,5 @@ public:
     void createUser(UserType, CustomString&, CustomString&, CustomString&, CustomVector<Mail>);
     void removeUser(int);
     CustomVector<Mail*>& getMailsUser(User&);
+    void serialize(std::ofstream& out) const override;
 };

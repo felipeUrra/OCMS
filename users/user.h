@@ -44,10 +44,9 @@ public:
     
     void sendMail(User*, const CustomString&);
     CustomString getStrUserType() const;
-    void printInbox();
+    void printInbox(CustomVector<User*>& users);
     bool isInboxEmpty() const;
-
-    // Serialize/deserialize
-    void serialize(std::ofstream& out) const;
-    void deserialize(std::ifstream& in);
+    virtual void serialize(std::ofstream& out) const = 0;
+    void serializeCommon(std::ofstream& out) const;
+    void deserializeCommon(std::ifstream& in);
 };

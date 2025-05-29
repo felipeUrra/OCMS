@@ -45,8 +45,8 @@ public:
     void createCourse(); //ready - solo si no hay algun curso con ese nombre ya
     void addToCourse(); //ready
     void assignHomework(); //ready
-    void messageStudents(); // of a specific course
-    void viewAssignmentSubmissions();
+    void messageStudents(); //of a specific course - ready
+    void viewAssignmentSubmissions(); //ready
     void gradeAssignment();
 
     // Student commands

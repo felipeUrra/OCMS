@@ -59,7 +59,7 @@ void CustomString::serialize(std::ofstream& out) const {
 void CustomString::deserialize(std::ifstream& in) {
 	int len;
 	in.read(reinterpret_cast<char*>(&len), sizeof(len));
-	if (len < 0 || len > 10000) { // límite arbitrario razonable
+	if (len < 0 || len > 10000) {
         throw std::runtime_error("String length out of bounds");
     }
 

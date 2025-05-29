@@ -42,7 +42,7 @@ Course* Teacher::getCourseByName(CustomString& courseName){ // change this funct
 
 // Serialize/deserialize
     void Teacher::serialize(std::ofstream& out) const {
-        User::serialize(out);
+        this->serializeCommon(out);
 
         int courseCount = this->courses.getSize();
         out.write(reinterpret_cast<const char*>(&courseCount), sizeof(courseCount));
@@ -50,15 +50,15 @@ Course* Teacher::getCourseByName(CustomString& courseName){ // change this funct
             courses[i]->serialize(out);
         }
     }
-    void Teacher::deserialize(std::ifstream& in, const CustomVector<Student*>& students) {
-        User::deserialize(in);
+    void Teacher::deserialize(std::ifstream& in) {
+        this->deserializeCommon(in);
 
         int courseCount;
         in.read(reinterpret_cast<char*>(&courseCount), sizeof(courseCount));
         this->courses.clear();
         for (int i = 0; i < courseCount; i++) {
             Course* c = new Course();
-            c->deserialize(in, students);
+            c->deserialize(in);
             courses.push_back(c);
         }
     }

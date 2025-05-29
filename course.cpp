@@ -44,52 +44,47 @@ bool Course::hasAssignment(CustomString& assignmentName) const {
     return false;
 }
 
+Assignment* Course::getAssignmentByName(CustomString& assignmentName) {
+    for (int i = 0; i < this->assignments.getSize(); i++) {
+        if (this->assignments[i]->getName() == assignmentName) {
+            return this->assignments[i];
+        }
+    }
+    return nullptr;
+}
 
 // Serialize/deserialize
-    void Course::serialize(std::ofstream& out) const {
-        this->name.serialize(out);
-        this->password.serialize(out);
+void Course::serialize(std::ofstream& out) const {
+    this->name.serialize(out);
+    this->password.serialize(out);
 
-        int assignSize = assignments.getSize();
-        out.write(reinterpret_cast<const char*>(&assignSize), sizeof(assignSize));
-        for (int i = 0; i < assignSize; i++) {
-            assignments[i]->serialize(out);
-        }
-        
-        int studentCount = studentsMembers.getSize();
-        out.write(reinterpret_cast<const char*>(&studentCount), sizeof(studentCount));
-        for (int i = 0; i < studentCount; i++) {
-            int id = studentsMembers[i]->getId();
-            out.write(reinterpret_cast<const char*>(&id), sizeof(id));
-        }
+    int assignSize = assignments.getSize();
+    out.write(reinterpret_cast<const char*>(&assignSize), sizeof(assignSize));
+    for (int i = 0; i < assignSize; i++) {
+        assignments[i]->serialize(out);
     }
-    void Course::deserialize(std::ifstream& in, const CustomVector<Student*>& students) {
-        this->name.deserialize(in);
-        this->password.deserialize(in);
+    
+    // el error esta aqui
+    // int studentCount = studentsMembers.getSize();
+    // out.write(reinterpret_cast<const char*>(&studentCount), sizeof(studentCount));
+    // for (int i = 0; i < studentCount; i++) {
+    //     int id = studentsMembers[i]->getId();
+    //     out.write(reinterpret_cast<const char*>(&id), sizeof(id));
+    // }
+}
+void Course::deserialize(std::ifstream& in) {
+    this->name.deserialize(in);
+    this->password.deserialize(in);
 
-        int assignSize;
-        in.read(reinterpret_cast<char*>(&assignSize), sizeof(assignSize));
-        // for (size_t i = 0; i < assignments.getSize(); ++i) {
-        //     delete assignments[i];
-        // }
-        // this->assignments.clear();
-        for (int i = 0; i < assignSize; i++) {
-            Assignment* a = new Assignment();
-            a->deserialize(in, students);
-            this->assignments.push_back(a);
-        }
-        
-        int studentsCount;
-        in.read(reinterpret_cast<char*>(&studentsCount), sizeof(studentsCount));
-        //this->studentsMembers.clear();
-        for (int i = 0; i < studentsCount; i++) {
-            int sid;
-            in.read(reinterpret_cast<char*>(&sid), sizeof(sid));
-            for (int i = 0; i < students.getSize(); i++) {
-                if (students[i]->getId() == sid) {
-                    studentsMembers.push_back(students[i]);
-                    break;
-                }
-            }
-        }
+    int assignSize;
+    in.read(reinterpret_cast<char*>(&assignSize), sizeof(assignSize));
+    // for (size_t i = 0; i < assignments.getSize(); ++i) {
+    //     delete assignments[i];
+    // }
+    // this->assignments.clear();
+    for (int i = 0; i < assignSize; i++) {
+        Assignment* a = new Assignment();
+        a->deserialize(in);
+        this->assignments.push_back(a);
     }
+}

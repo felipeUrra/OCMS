@@ -30,9 +30,10 @@ public:
     void setAssignments(CustomVector<Assignment*>&);
     void setStudentsMembers(CustomVector<Student*>&);
 
-    bool hasAssignment(CustomString& assignmentName) const; 
+    bool hasAssignment(CustomString& assignmentName) const;
+    Assignment* getAssignmentByName(CustomString& assignmentName);
 
     // Serialize/deserialize
     void serialize(std::ofstream& out) const;
-    void deserialize(std::ifstream& in, const CustomVector<Student*>& students);
+    void deserialize(std::ifstream& in);
 };

@@ -6,3 +6,7 @@ Admin::Admin(CustomString name, CustomString lastName, CustomString password) :
     User(name, lastName, password, UserType::Admin) {}
 
 CustomVector<Mail*>& Admin::getMailsUser(User& user) {return user.getInbox();}
+
+void Admin::serialize(std::ofstream& out) const {
+    this->serializeCommon(out);
+}

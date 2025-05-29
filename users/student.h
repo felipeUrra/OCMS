@@ -23,6 +23,6 @@ public:
     bool hasAssignment(CustomString& assignmentName) const;
 
     // Serialize/deserialize
-    void serialize(std::ofstream& out) const;
+    void serialize(std::ofstream& out) const override;
     void deserialize(std::ifstream& in, const CustomVector<Course*>& courses);
 };

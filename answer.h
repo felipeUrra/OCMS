@@ -9,7 +9,7 @@
 
 class Answer {
 private:
-    Student* student;
+    int studentId;
     CustomString answerText;
     CustomString teacherComment;
     double grade;
@@ -17,17 +17,17 @@ private:
 
 public:
     Answer() = default;
-    Answer(Student*, CustomString&);
+    Answer(int, CustomString&);
     ~Answer() = default;
 
     // getters and setters
-    Student* getStudent();
+    int getStudentId() const;
     CustomString getAnswerText() const;
     CustomString getTeacherComment() const;
     double getGrade() const;
     bool getIsGraded() const;
 
-    void setStudent(Student*);
+    void setStudentId(int);
     void setAnswerText(CustomString&);
     void setTeacherCommet(CustomString&);
     void setGrade(double);
@@ -35,5 +35,5 @@ public:
 
     // Serialize/deserialize
     void serialize(std::ofstream& out) const;
-    void deserialize(std::ifstream& in, const CustomVector<Student*>& students);
+    void deserialize(std::ifstream& in);
 };

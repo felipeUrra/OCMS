@@ -1,6 +1,7 @@
 // Felipe Urra Rivadeneira 0MI8000066
 
 #include "user.h"
+#include "../utils.h"
 
 int User::nextId = 0;
 
@@ -33,7 +34,7 @@ void User::setUserType(UserType userType) {this->userType = userType;}
 void User::setNextId(int nextId) {User::nextId = nextId;}
 
 void User::sendMail(User* addressee, const CustomString& text) {
-    Mail* mail = new Mail(this, text);
+    Mail* mail = new Mail(this->id, text);
 
     addressee->getInbox().push_back(mail);
 }
@@ -44,9 +45,11 @@ CustomString User::getStrUserType() const{
     else {return "Student";}
 }
 
-void User::printInbox() {
+void User::printInbox(CustomVector<User*>& users) {
     for (int i = 0; i < this->inbox.getSize(); i++) {
-        this->getInbox()[i]->print();
+        User* sender = Utils::getUserById(inbox[i]->getSenderId(), users);
+        if (sender == nullptr) continue;
+        this->getInbox()[i]->print(sender);
     }
 }
 
@@ -56,35 +59,36 @@ bool User::isInboxEmpty() const{
 }
 
 // Serialize/deserialize
-    void User::serialize(std::ofstream& out) const {
-        // tengo que ver que hacer con nextID
-        this->name.serialize(out);
-        this->lastName.serialize(out);
-        out.write(reinterpret_cast<const char*>(&this->id), sizeof(id));
-        this->password.serialize(out);
-        
-        size_t inboxSize = this->inbox.getSize();
-        out.write(reinterpret_cast<const char*>(&inboxSize), sizeof(inboxSize));
-        for (int i = 0; i < inboxSize; i++) {
-            this->inbox[i]->serialize(out);
-        }
-
-        out.write(reinterpret_cast<const char*>(&this->userType), sizeof(userType));
+void User::serializeCommon(std::ofstream& out) const {
+    this->name.serialize(out);
+    this->lastName.serialize(out);
+    out.write(reinterpret_cast<const char*>(&this->id), sizeof(id));
+    this->password.serialize(out);
+    
+    int inboxSize = this->inbox.getSize();
+    out.write(reinterpret_cast<const char*>(&inboxSize), sizeof(inboxSize));
+    for (int i = 0; i < inboxSize; i++) {
+        this->inbox[i]->serialize(out);
     }
-    void User::deserialize(std::ifstream& in) {
-        this->name.deserialize(in);
-        this->lastName.deserialize(in);
-        in.read(reinterpret_cast<char*>(&this->id), sizeof(id));
-        this->password.deserialize(in);
+    int userTypeVal = static_cast<int>(this->userType);
+    out.write(reinterpret_cast<const char*>(&userTypeVal), sizeof(userTypeVal));
+}
 
-        int inboxSize;
-        in.read(reinterpret_cast<char*>(&inboxSize), sizeof(inboxSize));
-        //this->inbox.clear();
-        for (int i = 0; i < inboxSize; i++) {
-            Mail* m = new Mail();
-            m->deserialize(in);
-            this->inbox.push_back(m);
-        }
-        
-        in.read(reinterpret_cast<char*>(&this->userType), sizeof(userType));
+void User::deserializeCommon(std::ifstream& in) {
+    this->name.deserialize(in);
+    this->lastName.deserialize(in);
+    in.read(reinterpret_cast<char*>(&this->id), sizeof(id));
+    this->password.deserialize(in);
+
+    int inboxSize;
+    in.read(reinterpret_cast<char*>(&inboxSize), sizeof(inboxSize));
+    this->inbox.clear();
+    for (int i = 0; i < inboxSize; i++) {
+        Mail* m = new Mail();
+        m->deserialize(in);
+        this->inbox.push_back(m);
     }
+    int userTypeVal;
+    in.read(reinterpret_cast<char*>(&userTypeVal), sizeof(userTypeVal));
+    this->userType = static_cast<UserType>(userTypeVal);
+}

@@ -25,9 +25,9 @@ public:
     void setName(CustomString&);
 
     void addAnswer(Student*, CustomString&);
-    void printAnswers(); // Student Name, StudentLastName, StudentId: AnswerText
+    void printAnswers(CustomVector<Student*>& students); // Student Name, StudentLastName, StudentId: AnswerText
 
     // Serialize/deserialize
     void serialize(std::ofstream& out) const;
-    void deserialize(std::ifstream& in, const CustomVector<Student*>& students);
+    void deserialize(std::ifstream& in);
 };

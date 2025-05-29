@@ -26,6 +26,6 @@ public:
     Course* getCourseByName(CustomString&);
 
     // Serialize/deserialize
-    void serialize(std::ofstream& out) const;
-    void deserialize(std::ifstream& in, const CustomVector<Student*>& students);
+    void serialize(std::ofstream& out) const override;
+    void deserialize(std::ifstream& in);
 };

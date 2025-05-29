@@ -8,27 +8,27 @@ class User;
 
 class Mail {
 private:
-    User* sender;
+    int senderId;
     CustomString text;
     CustomString date;
     CustomString time;
 
 public:
     Mail() = default;
-    Mail(User*, CustomString);
+    Mail(int senderId, CustomString text);
     ~Mail() = default;
 
     // getters and setters
-    User* getSender();
+    int getSenderId();
     CustomString getText() const;
     CustomString getDate() const;
     CustomString getTime() const;
 
-    void setSender(User*);
+    void setSenderId(int);
     void setText(CustomString&);
 
     void getActualDateAndTime();
-    void print();
+    void print(User* sender);
 
     // Serialize/deserialize
     void serialize(std::ofstream& out) const;
