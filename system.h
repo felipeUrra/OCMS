@@ -50,7 +50,7 @@ public:
     void gradeAssignment();
 
     // Student commands
-    void enroll();
+    void enroll(); //ready
     void submitAssignment();
     void grades();
 
