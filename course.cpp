@@ -30,8 +30,6 @@ void Course::setStudentsMembers(CustomVector<Student*>& studentsMembers) {
         this->studentsMembers = studentsMembers;
         return;
     }
-    
-    // maybe write something or handle it like a exception
 }
 
 
@@ -63,14 +61,6 @@ void Course::serialize(std::ofstream& out) const {
     for (int i = 0; i < assignSize; i++) {
         assignments[i]->serialize(out);
     }
-    
-    // el error esta aqui
-    // int studentCount = studentsMembers.getSize();
-    // out.write(reinterpret_cast<const char*>(&studentCount), sizeof(studentCount));
-    // for (int i = 0; i < studentCount; i++) {
-    //     int id = studentsMembers[i]->getId();
-    //     out.write(reinterpret_cast<const char*>(&id), sizeof(id));
-    // }
 }
 void Course::deserialize(std::ifstream& in) {
     this->name.deserialize(in);
@@ -78,10 +68,7 @@ void Course::deserialize(std::ifstream& in) {
 
     int assignSize;
     in.read(reinterpret_cast<char*>(&assignSize), sizeof(assignSize));
-    // for (size_t i = 0; i < assignments.getSize(); ++i) {
-    //     delete assignments[i];
-    // }
-    // this->assignments.clear();
+    
     for (int i = 0; i < assignSize; i++) {
         Assignment* a = new Assignment();
         a->deserialize(in);

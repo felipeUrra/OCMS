@@ -31,39 +31,34 @@ public:
     void setCloseSystem(bool);
 
     // Common commands
-    void login(); //ready
-    void logout(); //ready
-    void changePassword(); //ready
-    void mailBox(); //ready
-    void clearMailbox(); //ready
-    void message(); //ready
-    void quit(); //ready
-
-    //arregalar que cuando el admin manda un mensaje, escribe (Deleted user) - ready
-    //que el admin no pueda cambiar su contrasennna - ready
-    //arreglar las comprobaciones para el id en system - ready
-    //borrar el buffer de cin - ready
+    void login();
+    void logout();
+    void changePassword();
+    void mailBox();
+    void clearMailbox();
+    void message();
+    void quit();
 
     // Admin commands
-    void addTeacher(); //ready
-    void addStudent(); //ready
-    void removeTeacher(); //ready
-    void removeStudent(); //ready
-    void mailboxUser(); //ready
-    void messageAll(); //ready
+    void addTeacher();
+    void addStudent();
+    void removeTeacher();
+    void removeStudent();
+    void mailboxUser(); //of a specific user
+    void messageAll();
 
     // Teacher commands
-    void createCourse(); //ready - solo si no hay algun curso con ese nombre ya
-    void addToCourse(); //ready
-    void assignHomework(); //ready
-    void messageStudents(); //of a specific course - ready
-    void viewAssignmentSubmissions(); //ready
-    void gradeAssignment(); //ready
+    void createCourse();
+    void addToCourse();
+    void assignHomework();
+    void messageStudents(); //of a specific course
+    void viewAssignmentSubmissions();
+    void gradeAssignment();
 
     // Student commands
-    void enroll(); //ready
-    void submitAssignment(); //ready
-    void grades(); //ready
+    void enroll();
+    void submitAssignment();
+    void grades();
 
     // Auxiliar functions
     void detectCommand(CustomString& cmd);

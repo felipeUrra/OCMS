@@ -1,7 +1,6 @@
 // Felipe Urra Rivadeneira 0MI8000066
 
 #include "system.h"
-#include "exceptions.h"
 #include "users/teacher.h"
 #include "users/student.h"
 #include "answer.h"
@@ -85,7 +84,7 @@ void System::changePassword() {
         return;
     }
     
-    std::cout << "Wrong old password!\n"; // write something better here
+    std::cout << "Wrong old password!\n";
 }
 
 void System::mailBox() {
@@ -94,7 +93,7 @@ void System::mailBox() {
         return;
     }
     
-    this->loggedUser->printInbox(this->userList, this->systemAdmin); //pasarle tambien el admin
+    this->loggedUser->printInbox(this->userList, this->systemAdmin);
 }
 
 void System::clearMailbox() {
@@ -180,7 +179,7 @@ void System::removeTeacher() {
             for (int k = 0; k < student->getCoursesEnrolled().getSize(); k++) {
                 if (student->getCoursesEnrolled()[k]->getName() == course->getName()) {
                     student->getCoursesEnrolled().remove(k);
-                    break; // Exit the loop after removing the course
+                    break;
                 }
             }
         }
@@ -219,9 +218,9 @@ void System::removeStudent() {
             for (int k = 0; k < assignment->getAnswers().getSize(); k++) {
                 Answer* answer = assignment->getAnswers()[k];
                 if (answer->getStudentId() == s->getId()) {
-                    delete answer; // Free the answer memory
+                    delete answer;
                     assignment->getAnswers().remove(k);
-                    break; // Exit the loop after removing the answer
+                    break;
                 }
             }
         }
@@ -290,7 +289,7 @@ void System::createCourse() {
     t->createCourse(courseName, password);
 }
 
-void System::addToCourse() { //solo si el estudiante no esta en el curso
+void System::addToCourse() {
     CustomString courseName;
     int studentId;
 
@@ -320,7 +319,7 @@ void System::addToCourse() { //solo si el estudiante no esta en el curso
             return;
         }
         
-        t->enrollStudent(t->getCourseByName(courseName), s); // need to change this
+        t->enrollStudent(t->getCourseByName(courseName), s);
 
         CustomString mailText = this->loggedUser->getName() + " " + this->loggedUser->getLastName() + " added you to " + courseName;
         this->loggedUser->sendMail(s, mailText);
@@ -449,7 +448,7 @@ void System::gradeAssignment() {
 }
 
 // Student commands
-void System::enroll() { // solo si el estudiante no esta en el curso
+void System::enroll() {
     CustomString courseName;
     CustomString coursePassword;
 
@@ -486,7 +485,7 @@ void System::enroll() { // solo si el estudiante no esta en el curso
     std::cout << "There is no course with that name!\n";
 }
 
-void System::submitAssignment() { //solo si no hay una submission del estudiante para esa tarea
+void System::submitAssignment() {
     CustomString courseName;
     CustomString assignmentName;
     char* buffer = new char[256000]; // 256kB buffer for the answer text

@@ -10,6 +10,8 @@ int main() {
     System system;
     Utils::loadSystemState(system, "systemData.bin");
 
+    std::cout << "****************OCMS*******************";
+
     int i = 0;
     while (system.getCloseSystem() == false) {
         if (i > 0 && std::cin.peek() != '\n') {
