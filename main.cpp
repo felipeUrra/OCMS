@@ -10,7 +10,7 @@ int main() {
     System system;
     Utils::loadSystemState(system, "systemData.bin");
 
-    std::cout << "****************OCMS*******************";
+    std::cout << "****************OCMS*******************\n";
 
     int i = 0;
     while (system.getCloseSystem() == false) {
