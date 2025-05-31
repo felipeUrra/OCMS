@@ -271,6 +271,16 @@ void System::createCourse() {
 
     std::cin >> courseName >> password;
 
+    for (int i = 0; i < this->userList.getSize(); i++) {
+        if (this->userList[i]->getUserType() == UserType::Teacher) {
+            Teacher* t = dynamic_cast<Teacher*>(userList[i]);
+            if (t->getCourseByName(courseName) != nullptr) {
+                std::cout << "There is already one course with that name!\n";
+                return;
+            }
+        }
+    }
+    
     Teacher* t = dynamic_cast<Teacher*>(loggedUser);
     if (t->getCourseByName(courseName) != nullptr) {
         std::cout << "You already have one course with that name!\n";
@@ -307,6 +317,7 @@ void System::addToCourse() { //solo si el estudiante no esta en el curso
         Course* c = t->getCourseByName(courseName);
         if (c == nullptr) {
             std::cout << "You don't have any course with that name!\n";
+            return;
         }
         
         t->enrollStudent(t->getCourseByName(courseName), s); // need to change this
@@ -432,7 +443,7 @@ void System::gradeAssignment() {
     answer->setTeacherCommet(comment);
     answer->setIsGraded(true);
 
-    CustomString mailText = t->getName() + " " + t->getLastName() + " graded your work on " + assignment->getName();
+    CustomString mailText = t->getName() + " " + t->getLastName() + " graded your work on " + assignment->getName() + " in " + courseName;
     Student* s = Utils::getStudentById(studentId, c->getStudentsMembers());
     t->sendMail(s, mailText); 
 }
@@ -452,8 +463,7 @@ void System::enroll() { // solo si el estudiante no esta en el curso
 
             Course* c = t->getCourseByName(courseName);
             if (c == nullptr) {
-                std::cout << "Theres is no course with that name!\n";
-                return;
+                continue;
             }
             
             if (c->getPassword() == coursePassword) {
@@ -473,7 +483,7 @@ void System::enroll() { // solo si el estudiante no esta en el curso
         }
     }
 
-    std::cout << "There are no courses to enroll in!\n";
+    std::cout << "There is no course with that name!\n";
 }
 
 void System::submitAssignment() { //solo si no hay una submission del estudiante para esa tarea

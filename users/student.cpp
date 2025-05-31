@@ -14,15 +14,18 @@ void Student::setCoursesEnrolled(CustomVector<Course*>& coursesEnrolled) {this->
 
 void Student::printGradesInfo() {
     for (int i = 0; i < this->coursesEnrolled.getSize(); i++) {
-        for (int j = 0; j < this->coursesEnrolled[i]->getAssignments().getSize(); j++) {
-            for (int k = 0; k < this->coursesEnrolled[i]->getAssignments()[j]->getAnswers().getSize(); k++) {
-                Answer* a = this->coursesEnrolled[i]->getAssignments()[j]->getAnswers()[k];
-                if (a->getStudentId() == this->getId() && a->getIsGraded() == true) {
-                    std::cout << this->coursesEnrolled[i]->getName() << " | " << this->coursesEnrolled[i]->getAssignments()[j]->getName() << " | " << a->getGrade() << " | " << a->getTeacherComment() << "\n";
-                }              
+        Course* course = this->coursesEnrolled[i];
+        for (int j = 0; j < course->getAssignments().getSize(); j++) {
+            Assignment* assignment = course->getAssignments()[j];
+            for (int k = 0; k < assignment->getAnswers().getSize(); k++) {
+                Answer* answer = assignment->getAnswers()[k];
+                if (answer->getStudentId() == this->getId() && answer->getIsGraded() == true) {
+                    std::cout << course->getName() << " | " << assignment->getName() << " | " << answer->getGrade() << " |  " << answer->getTeacherComment() << "\n";
+                }
             }
         }
     }
+    
 }
 
 bool Student::hasCourse(CustomString& courseName) const{

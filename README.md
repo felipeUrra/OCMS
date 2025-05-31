@@ -9,3 +9,5 @@ To compile:
 
 To run:
 - gdb main.exe
+
+If when you are running the program and you write a command and you pulse enter, and it seems to not respond, pulse enter again and will work.
