@@ -334,7 +334,7 @@ void System::assignHomework() {
     }
 
     if (course->hasAssignment(assignmentName)) {
-        std::cout << "You already have an assignment with that name!\n";
+        std::cout << "This course already has an assignment with that name!\n";
         return;
     }
 

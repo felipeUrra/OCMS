@@ -41,7 +41,7 @@ public:
 
     //arregalar que cuando el admin manda un mensaje, escribe (Deleted user) - ready
     //que el admin no pueda cambiar su contrasennna - ready
-    //arreglar las comprobaciones para el id en system - semiready
+    //arreglar las comprobaciones para el id en system - ready
     //borrar el buffer de cin - ready
 
     // Admin commands

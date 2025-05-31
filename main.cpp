@@ -12,9 +12,13 @@ int main() {
 
     int i = 0;
     while (system.getCloseSystem() == false) {
-        std::cout << "> ";
+        if (i > 0 && std::cin.peek() != '\n') {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Warning: You entered more parameters than necessary.\n";
+        }
         
-        if (i > 0) std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "> ";
+
         CustomString cmd;
         std::cin >> cmd;
         system.detectCommand(cmd);
