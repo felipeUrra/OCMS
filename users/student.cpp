@@ -18,7 +18,7 @@ void Student::printGradesInfo() {
             for (int k = 0; k < this->coursesEnrolled[i]->getAssignments()[j]->getAnswers().getSize(); k++) {
                 Answer* a = this->coursesEnrolled[i]->getAssignments()[j]->getAnswers()[k];
                 if (a->getStudentId() == this->getId() && a->getIsGraded() == true) {
-                    std::cout << this->coursesEnrolled[i]->getName() << " | " << this->coursesEnrolled[i]->getAssignments()[j] << " | " << a->getGrade() << " | " << a->getTeacherComment() << "\n";
+                    std::cout << this->coursesEnrolled[i]->getName() << " | " << this->coursesEnrolled[i]->getAssignments()[j]->getName() << " | " << a->getGrade() << " | " << a->getTeacherComment() << "\n";
                 }              
             }
         }

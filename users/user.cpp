@@ -1,6 +1,7 @@
 // Felipe Urra Rivadeneira 0MI8000066
 
 #include "user.h"
+#include "admin.h"
 #include "../utils.h"
 
 int User::nextId = 0;
@@ -45,10 +46,14 @@ CustomString User::getStrUserType() const{
     else {return "Student";}
 }
 
-void User::printInbox(CustomVector<User*>& users) {
+void User::printInbox(CustomVector<User*>& users, Admin* admin) {
     for (int i = 0; i < this->inbox.getSize(); i++) {
+        if (inbox[i]->getSenderId() == 0) {
+             this->getInbox()[i]->print(admin);
+             continue;
+        }
+
         User* sender = Utils::getUserById(inbox[i]->getSenderId(), users);
-        if (sender == nullptr) continue;
         this->getInbox()[i]->print(sender);
     }
 }

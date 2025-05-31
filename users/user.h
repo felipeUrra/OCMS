@@ -9,6 +9,8 @@
 
 enum class UserType {Admin = 1, Teacher = 2, Student = 3};
 
+class Admin;
+
 class User {
 private:
     static int nextId;
@@ -44,7 +46,7 @@ public:
     
     void sendMail(User*, const CustomString&);
     CustomString getStrUserType() const;
-    void printInbox(CustomVector<User*>& users);
+    void printInbox(CustomVector<User*>& users, Admin* admin);
     bool isInboxEmpty() const;
     virtual void serialize(std::ofstream& out) const = 0;
     void serializeCommon(std::ofstream& out) const;

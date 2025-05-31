@@ -26,6 +26,8 @@ public:
 
     void addAnswer(Student*, CustomString&);
     void printAnswers(CustomVector<Student*>& students); // Student Name, StudentLastName, StudentId: AnswerText
+    Answer* getAnswerByStudentId(int studentId);
+    bool hasAnswerOfStudent(int studentId) const;
 
     // Serialize/deserialize
     void serialize(std::ofstream& out) const;

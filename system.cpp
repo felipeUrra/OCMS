@@ -5,6 +5,7 @@
 #include "users/teacher.h"
 #include "users/student.h"
 #include "answer.h"
+#include "utils.h"
 #include <iostream>
 
 System::System() : closeSystem(false) {
@@ -42,10 +43,7 @@ void System::login() {
 
     std::cin >> id >> password;
 
-    // while (!isdigit(id) || id < 0) {
-    //     throw InvalidDataType();
-    //     std::cin >> id >> password;
-    // }
+    if (!Utils::isAllGoodWithDataEntry(id)) return;
     
     User* user = nullptr;
     if (id == 0) {
@@ -96,7 +94,7 @@ void System::mailBox() {
         return;
     }
     
-    this->loggedUser->printInbox(this->userList); //pasarle tambien el admin
+    this->loggedUser->printInbox(this->userList, this->systemAdmin); //pasarle tambien el admin
 }
 
 void System::clearMailbox() {
@@ -114,10 +112,7 @@ void System::message() {
     std::cin.getline(buffer, 256000);
     text = buffer;
 
-    while (!isdigit(id) && id < 0) {
-        throw InvalidDataType();
-        std::cin >> id >> text;
-    }
+    if (!Utils::isAllGoodWithDataEntry(id)) return;
 
     User* addresse = getUserById(id);
     if (addresse == nullptr) {
@@ -157,6 +152,106 @@ void System::addStudent() {
     std::cout << "Added student " << name << " " << lastName << " with ID " << student->getId() << "!\n";
 }
 
+void System::removeTeacher() {
+    int id;
+
+    std::cin >> id;
+
+    if (!Utils::isAllGoodWithDataEntry(id)) return;
+
+    User* u = getUserById(id);
+    if (u == nullptr) {
+        std::cout << "There is no user with that ID!\n";
+        return;
+    }
+
+    if (u->getUserType() == UserType::Admin) {
+        std::cout << "You can't remove the system administrator!\n";
+        return;
+    }
+
+    Teacher* teacher = dynamic_cast<Teacher*>(u);
+
+    for (int i = 0; i < teacher->getCourses().getSize(); i++) {
+        Course* course = teacher->getCourses()[i];
+        for (int j = 0; j < course->getStudentsMembers().getSize(); j++) {
+            Student* student = course->getStudentsMembers()[j];
+
+            for (int k = 0; k < student->getCoursesEnrolled().getSize(); k++) {
+                if (student->getCoursesEnrolled()[k]->getName() == course->getName()) {
+                    student->getCoursesEnrolled().remove(k);
+                    break; // Exit the loop after removing the course
+                }
+            }
+        }
+    }
+    
+
+    removeUserById(id);
+}
+
+void System::removeStudent() {
+    int id;
+
+    std::cin >> id;
+
+    if (!Utils::isAllGoodWithDataEntry(id)) return;
+
+    User* u = Utils::getUserById(id, this->userList);
+    if (u == nullptr) {
+        std::cout << "There is no user with that ID!\n";
+        return;
+    }
+
+    if (u->getUserType() != UserType::Student) {
+        std::cout << "This user is not a student!\n";
+        delete u;
+        return;
+    }
+
+    // Remove the student from all courses they are enrolled in
+    Student* s = dynamic_cast<Student*>(u);
+
+    for (int i = 0; i < s->getCoursesEnrolled().getSize(); i++) {
+        Course* course = s->getCoursesEnrolled()[i];
+        for (int j = 0; j < course->getAssignments().getSize(); j++) {
+            Assignment* assignment = course->getAssignments()[j];
+            for (int k = 0; k < assignment->getAnswers().getSize(); k++) {
+                Answer* answer = assignment->getAnswers()[k];
+                if (answer->getStudentId() == s->getId()) {
+                    delete answer; // Free the answer memory
+                    assignment->getAnswers().remove(k);
+                    break; // Exit the loop after removing the answer
+                }
+            }
+        }
+
+        for (int j = 0; j < course->getStudentsMembers().getSize(); j++) {
+            if (course->getStudentsMembers()[j]->getId() == s->getId()) {
+                course->getStudentsMembers().remove(j);
+            }
+        }
+    }
+    // Remove the student from the user list
+    removeUserById(id);
+}
+
+void System::mailboxUser() {
+    int id;
+
+    std::cin >> id;
+
+    if (!Utils::isAllGoodWithDataEntry(id)) return;
+
+    User* u = getUserById(id);
+    if (u == nullptr) {
+        std::cout << "There is no user with that ID!\n";
+        return;
+    }
+
+    u->printInbox(this->userList, this->systemAdmin);
+}
+
 void System::messageAll() {
     CustomString mailText;
     char* buffer = new char[256000]; // 256kB buffer for the mail text
@@ -191,10 +286,7 @@ void System::addToCourse() { //solo si el estudiante no esta en el curso
 
     std::cin >> courseName >> studentId;
 
-    while (!isdigit(studentId) && studentId < 0) {
-        throw InvalidDataType();
-        std::cin >> courseName >> studentId;
-    }
+    if (!Utils::isAllGoodWithDataEntry(studentId)) return;
 
     User* u = getUserById(studentId);
     if (u == nullptr) {
@@ -298,48 +390,51 @@ void System::viewAssignmentSubmissions() {
 void System::gradeAssignment() {
     CustomString courseName;
     CustomString assignmentName;
-    uint8_t studentId;
+    int studentId;
     double grade;
+    char* buffer = new char[256000];
     CustomString comment;
 
-    std::cin >> courseName >> assignmentName >> studentId >> grade >> comment;
+    std::cin >> courseName >> assignmentName >> studentId;
+    if (!Utils::isAllGoodWithDataEntry(studentId)) return;
 
-    while ((!isdigit(studentId) || studentId < 0) || (!isdigit(grade))) {
-        throw InvalidDataType();
-        std::cin >> courseName >> assignmentName >> studentId >> grade >> comment;
-    }
+    std::cin >> grade;
+    if (!Utils::isAllGoodWithDataEntry(grade)) return;
+
+    std::cin.getline(buffer, 256000);
+    comment = buffer;
 
     Teacher* t = dynamic_cast<Teacher*>(this->loggedUser);
-
-    for (uint8_t i = 0; i < t->getCourses().getSize(); i++) {
-        if (t->getCourses()[i]->getName() == courseName) {
-            for (uint8_t j = 0; j < t->getCourses()[i]->getAssignments().getSize(); j++) {
-                if (t->getCourses()[i]->getAssignments()[j]->getName() == assignmentName) {
-                    for (uint8_t k = 0; k < t->getCourses()[i]->getAssignments()[j]->getAnswers().getSize(); k++) {
-                        if (t->getCourses()[i]->getAssignments()[j]->getAnswers()[k]->getStudentId() == studentId) {
-                            t->getCourses()[i]->getAssignments()[j]->getAnswers()[k]->setGrade(grade);
-                            t->getCourses()[i]->getAssignments()[j]->getAnswers()[k]->setTeacherCommet(comment);
-                            t->getCourses()[i]->getAssignments()[j]->getAnswers()[k]->setIsGraded(true);
-
-                            for (uint8_t l = 0; l < this->userList.getSize(); l++) {
-                                if (this->userList[l]->getId() == studentId) {
-                                    CustomString mailText = t->getName() + " " + t->getLastName() + " graded your work on";
-                                    t->sendMail(this->userList[l], mailText);
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                    std::cout << "There is no assigment submission belonging to a student with that ID.";
-                    return;
-                }
-            }
-            std::cout << "This course doesn't have any assignments with that name!\n";
-            return;
-        }
+    Course* c = t->getCourseByName(courseName);
+    if (c == nullptr) {
+        std::cout << "You don't have any courses with that name!\n";
+        return;
     }
 
-    std::cout << "You don't have any courses with that name!\n";    
+    Assignment* assignment = c->getAssignmentByName(assignmentName);
+    if (assignment == nullptr) {
+        std::cout << "This course doesn't have any assignments with that name!\n";
+        return;
+    }
+
+    Answer* answer = assignment->getAnswerByStudentId(studentId);
+    if (answer == nullptr) {
+        std::cout << "There is no assigment submission belonging to a student with that ID.\n";
+        return;
+    }
+
+    if (answer->getIsGraded()) {
+        std::cout << "This assignment has already been graded!\n";
+        return;
+    }
+    
+    answer->setGrade(grade);
+    answer->setTeacherCommet(comment);
+    answer->setIsGraded(true);
+
+    CustomString mailText = t->getName() + " " + t->getLastName() + " graded your work on " + assignment->getName();
+    Student* s = Utils::getStudentById(studentId, c->getStudentsMembers());
+    t->sendMail(s, mailText); 
 }
 
 // Student commands
@@ -392,20 +487,24 @@ void System::submitAssignment() { //solo si no hay una submission del estudiante
     answerText = buffer;
 
     Student* s = dynamic_cast<Student*>(this->loggedUser);
-
-    for (uint8_t i = 0; i < s->getCoursesEnrolled().getSize(); i++) {
-        if (s->getCoursesEnrolled()[i]->getName() == courseName) {
-            for (uint8_t j = 0; j < s->getCoursesEnrolled()[i]->getAssignments().getSize(); j++) {
-                if (s->getCoursesEnrolled()[i]->getAssignments()[j]->getName() == assignmentName) {
-                    s->getCoursesEnrolled()[i]->getAssignments()[j]->addAnswer(s, answerText);
-                    return;
-                }
-            }
-            std::cout << "This course doesn't have any assignments with that name!\n";
-            return;
-        }
+    Course* c = Utils::getCourseByName(courseName, s->getCoursesEnrolled());
+    if (c == nullptr) {
+        std::cout << "You have not enrolled in any course with this name!\n";
+        return;
     }
-    std::cout << "You have not enrolled in any course with this name!\n";
+
+    Assignment* a = c->getAssignmentByName(assignmentName);
+    if (a == nullptr) {
+        std::cout << "This course doesn't have any assignments with that name!\n";
+        return;
+    }
+
+    if (a->hasAnswerOfStudent(s->getId())) {
+        std::cout << "You have already submitted an answer for this assignment!\n";
+        return;
+    }
+    
+    a->addAnswer(s, answerText);
 }
 
 void System::grades() {
@@ -415,7 +514,7 @@ void System::grades() {
 }
 
 // Auxiliar functions
-void System::detectCommand(CustomString& cmd) { // hacer que haga algo cuando el comando no coincide
+void System::detectCommand(CustomString& cmd) {
     if(loggedUser == nullptr) {
         if(cmd == "login") {
             login();
@@ -436,6 +535,18 @@ void System::detectCommand(CustomString& cmd) { // hacer que haga algo cuando el
                 addStudent();
                 return;
             }
+            if(cmd == "remove_teacher") {
+                removeTeacher();
+                return;
+            }
+            if (cmd == "remove_student") {
+                removeStudent();
+                return;
+            }
+            if (cmd == "mailbox_user") {
+                mailboxUser();
+                return;
+            }
             if(cmd == "message_all") {
                 messageAll();
                 return;
@@ -443,6 +554,10 @@ void System::detectCommand(CustomString& cmd) { // hacer que haga algo cuando el
         }
 
         if(loggedUser->getUserType() == UserType::Teacher) {
+            if(cmd == "change_password") {
+                changePassword();
+                return;
+            }    
             if(cmd == "create_course") {
                 createCourse();
                 return;
@@ -470,6 +585,11 @@ void System::detectCommand(CustomString& cmd) { // hacer que haga algo cuando el
         }
 
         if(loggedUser->getUserType() == UserType::Student) {
+            if(cmd == "change_password") {
+                changePassword();
+                return;
+            }            
+            
             if(cmd == "enroll") {
                 enroll();
                 return;
@@ -488,15 +608,11 @@ void System::detectCommand(CustomString& cmd) { // hacer que haga algo cuando el
             logout();
             return;
         }
-        if(cmd == "change_password") {
-            changePassword();
-            return;
-        }
         if(cmd == "mailbox") {
             mailBox();
             return;
         }
-        if(cmd == "clearMailbox") {
+        if(cmd == "clear_mailbox") {
             clearMailbox();
             return;
         }
@@ -540,6 +656,9 @@ void System::serialize(std::ofstream& out) const {
         out.write(reinterpret_cast<const char*>(&userTypeVal), sizeof(userTypeVal));
         this->userList[i]->serialize(out);
     }
+
+    int nextId = User::getNextId();
+    out.write(reinterpret_cast<const char*>(&nextId), sizeof(nextId));
 }
 
 void System::deserialize(std::ifstream& in) {
@@ -556,7 +675,7 @@ void System::deserialize(std::ifstream& in) {
         if (type == UserType::Teacher) {
             u = new Teacher();
             dynamic_cast<Teacher*>(u)->deserialize(in);
-            allCourses += static_cast<Teacher*>(u)->getCourses();
+            allCourses += dynamic_cast<Teacher*>(u)->getCourses();
         } else {
             u = new Student();
             dynamic_cast<Student*>(u)->deserialize(in, allCourses);
@@ -566,5 +685,18 @@ void System::deserialize(std::ifstream& in) {
             userList.push_back(u);
         }
     }
-    User::setNextId(userCount + 1);
+
+    int n;
+    in.read(reinterpret_cast<char*>(&n), sizeof(n));
+    User::setNextId(n);
+}
+
+void System::removeUserById(int id) {
+    for (int i = 0; i < userList.getSize(); i++) {
+        if (userList[i]->getId() == id) {
+            userList.remove(i);
+            std::cout << "Removed user with ID " << id << "!\n";
+            return;
+        }
+    }
 }

@@ -12,6 +12,9 @@ private:
     Admin* systemAdmin;
     bool closeSystem;
 
+    // Private helper functions
+    void removeUserById(int id);
+
 public:
     System();
     ~System();
@@ -36,9 +39,17 @@ public:
     void message(); //ready
     void quit(); //ready
 
+    //arregalar que cuando el admin manda un mensaje, escribe (Deleted user) - ready
+    //que el admin no pueda cambiar su contrasennna - ready
+    //arreglar las comprobaciones para el id en system - semiready
+    //borrar el buffer de cin - ready
+
     // Admin commands
     void addTeacher(); //ready
     void addStudent(); //ready
+    void removeTeacher(); //ready
+    void removeStudent(); //ready
+    void mailboxUser(); //ready
     void messageAll(); //ready
 
     // Teacher commands
@@ -47,12 +58,12 @@ public:
     void assignHomework(); //ready
     void messageStudents(); //of a specific course - ready
     void viewAssignmentSubmissions(); //ready
-    void gradeAssignment();
+    void gradeAssignment(); //ready
 
     // Student commands
     void enroll(); //ready
-    void submitAssignment();
-    void grades();
+    void submitAssignment(); //ready
+    void grades(); //ready
 
     // Auxiliar functions
     void detectCommand(CustomString& cmd);

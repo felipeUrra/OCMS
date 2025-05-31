@@ -42,24 +42,41 @@ void Assignment::printAnswers(CustomVector<Student*>& students) {
     }
 }
 
-// Serialize/deserialize
-    void Assignment::serialize(std::ofstream& out) const {
-        this->serialize(out);
+Answer* Assignment::getAnswerByStudentId(int studentId){
+    for (int i = 0; i < answers.getSize(); i++) {
+        if (answers[i]->getStudentId() == studentId) {
+            return answers[i];
+        }
+    }
+    return nullptr;
+}
 
-        size_t ansSize = answers.getSize();
-        out.write(reinterpret_cast<const char*>(&ansSize), sizeof(ansSize));
-        for (int i = 0; i < ansSize; i++) {
-            answers[i]->serialize(out);
+bool Assignment::hasAnswerOfStudent(int studentId) const {
+    for (int i = 0; i < answers.getSize(); i++) {
+        if (answers[i]->getStudentId() == studentId) {
+            return true;
         }
     }
-    void Assignment::deserialize(std::ifstream& in) {
-        this->name.deserialize(in);
-        size_t ansSize;
-        in.read(reinterpret_cast<char*>(&ansSize), sizeof(ansSize));
-        //this->answers.clear();
-        for (size_t i = 0; i < ansSize; i++) {
-            Answer* ans = new Answer();
-            ans->deserialize(in);
-            answers.push_back(ans);
-        }
+    return false;
+}
+
+// Serialize/deserialize
+void Assignment::serialize(std::ofstream& out) const {
+    this->name.serialize(out);
+    int ansSize = answers.getSize();
+    out.write(reinterpret_cast<const char*>(&ansSize), sizeof(ansSize));
+    for (int i = 0; i < ansSize; i++) {
+        answers[i]->serialize(out);
     }
+}
+void Assignment::deserialize(std::ifstream& in) {
+    this->name.deserialize(in);
+    int ansSize;
+    in.read(reinterpret_cast<char*>(&ansSize), sizeof(ansSize));
+    this->answers.clear();
+    for (int i = 0; i < ansSize; i++) {
+        Answer* ans = new Answer();
+        ans->deserialize(in);
+        answers.push_back(ans);
+    }
+}

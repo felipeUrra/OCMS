@@ -1,4 +1,5 @@
 #include "utils.h"
+#include <limits>
 
 void Utils::saveSystemState(const System& system, const CustomString& filename) {
     const char* fn = filename.c_str();
@@ -45,7 +46,6 @@ User* Utils::getUserById(int id, const CustomVector<User*>& users) {
         }
     }
 
-    std::cout << "No user found with ID: " << id << "\n";
     return nullptr;
 }
 
@@ -55,6 +55,25 @@ Course* Utils::getCourseByName(CustomString& courseName, const CustomVector<Cour
             return courses[i];
         }
     }
-    std::cout << "No course found with name: " << courseName << '\n';
     return nullptr;
+}
+
+bool Utils::isAllGoodWithDataEntry(int id) {
+    if (std::cin.fail() || id < 0) {
+        std::cout << "Invalid ID! Please enter a positive integer.\n";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        return false;
+    }
+    return true;
+}
+
+bool Utils::isAllGoodWithDataEntry(double grade) {
+    if (std::cin.fail() || grade > 6.0) {
+        std::cout << "Invalid grade! Please enter a positive rational number lower than 6.\n";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        return false;
+    }
+    return true;
 }

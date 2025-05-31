@@ -36,6 +36,10 @@ void Mail::getActualDateAndTime() {
 }
 
 void Mail::print(User* sender) {
+    if (sender == nullptr) {
+        std::cout << time << " " << date << ", sent by " << "(Deleted user)" << ": " << text << "\n";
+        return;
+    }
     std::cout << time << " " << date << ", sent by " << sender->getName() << " " << sender->getLastName() << ": " << text << "\n";
 }
 
