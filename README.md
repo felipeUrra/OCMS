@@ -2,8 +2,6 @@
 
 **OCMS** (Online Courses Manager System) is a C++ console application that simulates a simple learning management system (LMS). It supports different user roles (Administrator, Teacher, Student), course/assignment management, submissions (answers), grading, and basic internal messaging.
 
-> This repository appears to be a homework/learning project.
-
 ## Features
 
 - **Role-based users**
